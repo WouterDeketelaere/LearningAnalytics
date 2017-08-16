@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.webjars:d3js:4.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars/d3js/4.2.1/89fe2e85b77726c2cb9ed8a3081bc6dbb1e3b737/d3js-4.2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars/d3js/4.2.1/31c388974d464dff7b7f2d36867d0e163038c736/d3js-4.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

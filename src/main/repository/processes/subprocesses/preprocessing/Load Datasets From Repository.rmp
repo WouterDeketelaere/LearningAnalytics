@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve STELA_Grades_Jan" width="90" x="313" y="136">
+        <parameter key="repository_entry" value="../../datasets/STELA_Grades_Jan"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve STELA_Grades_June" width="90" x="313" y="238">
+        <parameter key="repository_entry" value="../../datasets/STELA_Grades_June"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve STELA_Grades_September" width="90" x="313" y="340">
+        <parameter key="repository_entry" value="../../datasets/STELA_Grades_September"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve STELA_Throughput" width="90" x="313" y="34">
+        <parameter key="repository_entry" value="../../datasets/STELA_Throughput"/>
+      </operator>
+      <connect from_op="Retrieve STELA_Grades_Jan" from_port="output" to_port="result 2"/>
+      <connect from_op="Retrieve STELA_Grades_June" from_port="output" to_port="result 3"/>
+      <connect from_op="Retrieve STELA_Grades_September" from_port="output" to_port="result 4"/>
+      <connect from_op="Retrieve STELA_Throughput" from_port="output" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+      <portSpacing port="sink_result 4" spacing="0"/>
+      <portSpacing port="sink_result 5" spacing="0"/>
+    </process>
+  </operator>
+</process>

@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/html"
+      layout:decorator="base">
+<head>
+    <title>Learning Analytics - Welcome</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-2" th:replace="fragments/aside :: aside(index='about')"></div>
+        <div class="col-lg-10">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h6>Learning Analytics</h6></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 text-justify">
+                            <div class="col-md-12">
+                                <h2>About</h2>
+                                <p>
+                                    The interest in the analysis of educational data has increased in the last couple of
+                                    decades due to the fact that students and institutions increasingly began to take
+                                    advantage of e-learning platforms.
+                                </p>
+                                <div id="lagraph">
+                                    <img src="images/LA.png" alt="Worldwide interest in data mining">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

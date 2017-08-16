@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.freehep:freehep-graphicsio:2.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.freehep/freehep-graphicsio/2.3/ef5f8bc45c5daa8aa34fd2ac64963f969369ed94/freehep-graphicsio-2.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.freehep/freehep-graphicsio/2.3/1781baf0e3dc31ff6d80acdbd9317d69ea3bc2af/freehep-graphicsio-2.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

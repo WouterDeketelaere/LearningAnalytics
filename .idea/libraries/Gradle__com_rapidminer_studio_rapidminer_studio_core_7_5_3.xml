@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.rapidminer.studio:rapidminer-studio-core:7.5.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rapidminer.studio/rapidminer-studio-core/7.5.3/e2d0cce60983157f95eecc190c6e363f9ba63ee6/rapidminer-studio-core-7.5.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rapidminer.studio/rapidminer-studio-core/7.5.3/d1c72ca9bfb87dcd2cb8532b587f98d21ac76054/rapidminer-studio-core-7.5.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

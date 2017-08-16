@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.3.000">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.3.000" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="7.3.000" expanded="true" height="68" name="Retrieve scores_jan_2009_2011" width="90" x="45" y="289">
+        <parameter key="repository_entry" value="../data/scores_jan_2009_2011"/>
+      </operator>
+      <operator activated="true" class="parse_numbers" compatibility="7.3.000" expanded="true" height="82" name="Parse Numbers" width="90" x="179" y="289">
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="nominal"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="file_path"/>
+        <parameter key="block_type" value="single_value"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="single_value"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="decimal_character" value="."/>
+        <parameter key="grouped_digits" value="false"/>
+        <parameter key="grouping_character" value=","/>
+        <parameter key="unparsable_value_handling" value="replace with missing values"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.3.000" expanded="true" height="68" name="Retrieve STELA_Doorloopgegevens_2009_2010" width="90" x="45" y="187">
+        <parameter key="repository_entry" value="../data/STELA_Doorloopgegevens_2009_2010"/>
+      </operator>
+      <operator activated="true" class="parse_numbers" compatibility="7.3.000" expanded="true" height="82" name="Parse Numbers (2)" width="90" x="179" y="187">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="Jaar X|Jaar X+1: Beginstatus|Jaar X: Eindstatus|Jaar X: Instelling|Jaar X: Kwalificatie vooropleiding|Jaar X: Opl. na heroriëntering|Jaar X: Opl. voor heroriëntering|Jaar X: Org. eenheid|Jaar X: Soort contract|Jaar X: Soort opleiding|Jaar X: Soort traject"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="nominal"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="file_path"/>
+        <parameter key="block_type" value="single_value"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="single_value"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="decimal_character" value="."/>
+        <parameter key="grouped_digits" value="false"/>
+        <parameter key="grouping_character" value=","/>
+        <parameter key="unparsable_value_handling" value="replace with missing values"/>
+      </operator>
+      <operator activated="true" class="join" compatibility="7.3.000" expanded="true" height="82" name="Join" width="90" x="313" y="238">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="false"/>
+        <list key="key_attributes">
+          <parameter key="Stamnummer student" value="Stamnummer student"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="7.3.000" expanded="true" height="103" name="Filter Examples" width="90" x="447" y="238">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="false"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="Doorloop: Studieduur.equals.+0"/>
+          <parameter key="filters_entry_key" value="Jaar X: Opleiding.equals.ABA ingenieurswetenschappen (Leuv)"/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+      </operator>
+      <operator activated="true" class="multiply" compatibility="7.3.000" expanded="true" height="103" name="Multiply" width="90" x="514" y="85"/>
+      <operator activated="true" class="select_attributes" compatibility="7.3.000" expanded="true" height="82" name="Select Januari (2)" width="90" x="581" y="238">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="H9XA1A|H9X23A|H06V4A|H06M6A|H06I3A|H03Z0A|H03P7A|H03P1B|H03L1A|H03K8A|H01Z2A|H01Y7A|H01Y6A|H01Y5B|H01Y3A|H01W9B|H01W8A|H01W6A|H01W2B|H01W1A|H01W0A|H01V8A|H01V6A|H01V5B|H01V4A|H01V0B|H01U9A|H01U7A|H01U5A|H01U3B|H01U1A|H01T8A|H01T7B|H01T5B|H01T3B|H01T1A|H01S6B|H01S4A|H01P1A|H01H3A|H01D0A|H01C8A|H01C4B|H01C2A|H01B9A|H01B6B|H01B4A|H01B2A|H01B0A|H01A8A|H01A4A|H01A2A|H01A0B"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="replace_missing_values" compatibility="7.3.000" expanded="true" height="103" name="Replace Missing Values (2)" width="90" x="715" y="238">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="Doorloop: Studieduur"/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="true"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="default" value="value"/>
+        <list key="columns"/>
+        <parameter key="replenishment_value" value="0"/>
+      </operator>
+      <operator activated="true" class="remove_useless_attributes" compatibility="7.3.000" expanded="true" height="82" name="Remove Useless Attributes" width="90" x="849" y="238">
+        <parameter key="numerical_min_deviation" value="0.0"/>
+        <parameter key="nominal_useless_above" value="1.0"/>
+        <parameter key="nominal_remove_id_like" value="false"/>
+        <parameter key="nominal_useless_below" value="0.0"/>
+      </operator>
+      <operator activated="true" class="x_means" compatibility="7.3.000" expanded="true" height="82" name="X-Means" width="90" x="983" y="238">
+        <parameter key="add_cluster_attribute" value="true"/>
+        <parameter key="add_as_label" value="false"/>
+        <parameter key="remove_unlabeled" value="false"/>
+        <parameter key="k_min" value="2"/>
+        <parameter key="k_max" value="60"/>
+        <parameter key="determine_good_start_values" value="false"/>
+        <parameter key="measure_types" value="NumericalMeasures"/>
+        <parameter key="mixed_measure" value="MixedEuclideanDistance"/>
+        <parameter key="nominal_measure" value="NominalDistance"/>
+        <parameter key="numerical_measure" value="EuclideanDistance"/>
+        <parameter key="divergence" value="GeneralizedIDivergence"/>
+        <parameter key="kernel_type" value="radial"/>
+        <parameter key="kernel_gamma" value="1.0"/>
+        <parameter key="kernel_sigma1" value="1.0"/>
+        <parameter key="kernel_sigma2" value="0.0"/>
+        <parameter key="kernel_sigma3" value="2.0"/>
+        <parameter key="kernel_degree" value="3.0"/>
+        <parameter key="kernel_shift" value="1.0"/>
+        <parameter key="kernel_a" value="1.0"/>
+        <parameter key="kernel_b" value="0.0"/>
+        <parameter key="clustering_algorithm" value="KMeans"/>
+        <parameter key="max_runs" value="10"/>
+        <parameter key="max_optimization_steps" value="100"/>
+        <parameter key="use_local_random_seed" value="false"/>
+        <parameter key="local_random_seed" value="1992"/>
+      </operator>
+      <connect from_op="Retrieve scores_jan_2009_2011" from_port="output" to_op="Parse Numbers" to_port="example set input"/>
+      <connect from_op="Parse Numbers" from_port="example set output" to_op="Join" to_port="right"/>
+      <connect from_op="Retrieve STELA_Doorloopgegevens_2009_2010" from_port="output" to_op="Parse Numbers (2)" to_port="example set input"/>
+      <connect from_op="Parse Numbers (2)" from_port="example set output" to_op="Join" to_port="left"/>
+      <connect from_op="Join" from_port="join" to_op="Filter Examples" to_port="example set input"/>
+      <connect from_op="Filter Examples" from_port="example set output" to_op="Multiply" to_port="input"/>
+      <connect from_op="Multiply" from_port="output 1" to_op="Select Januari (2)" to_port="example set input"/>
+      <connect from_op="Multiply" from_port="output 2" to_port="result 2"/>
+      <connect from_op="Select Januari (2)" from_port="example set output" to_op="Replace Missing Values (2)" to_port="example set input"/>
+      <connect from_op="Replace Missing Values (2)" from_port="example set output" to_op="Remove Useless Attributes" to_port="example set input"/>
+      <connect from_op="Remove Useless Attributes" from_port="example set output" to_op="X-Means" to_port="example set"/>
+      <connect from_op="X-Means" from_port="cluster model" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+    </process>
+  </operator>
+</process>

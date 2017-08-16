@@ -1,0 +1,58 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+/*
+div.roc {
+    height: 100%;
+}
+*/
+
+g.tick text {
+    font-size: 10px;
+}
+
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+}
+
+.overlay {
+    fill: none;
+    stroke: none;
+    pointer-events: all;
+}
+
+.focusLine {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1px;
+}
+
+.axis{
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    vertical-align: center;
+    width: 100px;
+    height: 20px;
+    padding: 2px;
+    font: 14px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.roc_path{
+    fill: rgba(255, 20, 0, 0.1);
+}
+
+/* simple bar chart style */
+.bar { fill: steelblue; }

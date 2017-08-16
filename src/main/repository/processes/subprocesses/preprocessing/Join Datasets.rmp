@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply" width="90" x="100" y="55"/>
+      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join Progr - Jan" width="90" x="246" y="34">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="true"/>
+        <list key="key_attributes">
+          <parameter key="Stamnummer student" value="Stamnummer student"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply (2)" width="90" x="103" y="167"/>
+      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join in June grades" width="90" x="380" y="85">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="true"/>
+        <list key="key_attributes">
+          <parameter key="Stamnummer student" value="Stamnummer student"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply (3)" width="90" x="100" y="287"/>
+      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join in September (2)" width="90" x="514" y="136">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="true"/>
+        <list key="key_attributes">
+          <parameter key="Stamnummer student" value="Stamnummer student"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="7.5.003" expanded="true" height="103" name="Split IR - IRA" width="90" x="702" y="34">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="false"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="Jaar X: Opleiding.does_not_contain.architectuur"/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+      </operator>
+      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join Jan - June" width="90" x="507" y="232">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="true"/>
+        <list key="key_attributes">
+          <parameter key="Stamnummer student" value="Stamnummer student"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join in September" width="90" x="715" y="289">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="true"/>
+        <list key="key_attributes">
+          <parameter key="Stamnummer student" value="Stamnummer student"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <connect from_port="input 1" to_op="Join Progr - Jan" to_port="left"/>
+      <connect from_port="input 2" to_op="Multiply" to_port="input"/>
+      <connect from_port="input 3" to_op="Multiply (2)" to_port="input"/>
+      <connect from_port="input 4" to_op="Multiply (3)" to_port="input"/>
+      <connect from_op="Multiply" from_port="output 1" to_op="Join Progr - Jan" to_port="right"/>
+      <connect from_op="Multiply" from_port="output 2" to_op="Join Jan - June" to_port="left"/>
+      <connect from_op="Join Progr - Jan" from_port="join" to_op="Join in June grades" to_port="left"/>
+      <connect from_op="Multiply (2)" from_port="output 1" to_op="Join in June grades" to_port="right"/>
+      <connect from_op="Multiply (2)" from_port="output 2" to_op="Join Jan - June" to_port="right"/>
+      <connect from_op="Join in June grades" from_port="join" to_op="Join in September (2)" to_port="left"/>
+      <connect from_op="Multiply (3)" from_port="output 1" to_op="Join in September (2)" to_port="right"/>
+      <connect from_op="Multiply (3)" from_port="output 2" to_op="Join in September" to_port="right"/>
+      <connect from_op="Join in September (2)" from_port="join" to_op="Split IR - IRA" to_port="example set input"/>
+      <connect from_op="Split IR - IRA" from_port="example set output" to_port="result 2"/>
+      <connect from_op="Split IR - IRA" from_port="original" to_port="result 1"/>
+      <connect from_op="Split IR - IRA" from_port="unmatched example set" to_port="result 3"/>
+      <connect from_op="Join Jan - June" from_port="join" to_op="Join in September" to_port="left"/>
+      <connect from_op="Join in September" from_port="join" to_port="result 4"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="source_input 2" spacing="0"/>
+      <portSpacing port="source_input 3" spacing="0"/>
+      <portSpacing port="source_input 4" spacing="0"/>
+      <portSpacing port="source_input 5" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+      <portSpacing port="sink_result 4" spacing="0"/>
+      <portSpacing port="sink_result 5" spacing="0"/>
+    </process>
+  </operator>
+</process>

@@ -1,0 +1,37 @@
+{
+  "nodes": [
+    {
+      "node": 0,
+      "name": "Starter"
+    },
+    {
+      "node": 1,
+      "name": "Green"
+    },
+    {
+      "node": 2,
+      "name": "Red"
+    },
+    {
+      "node": 3,
+      "name": "Orange"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 1,
+      "value": 409
+    },
+    {
+      "source": 0,
+      "target": 2,
+      "value": 500
+    },
+    {
+      "source": 0,
+      "target": 3,
+      "value": 125
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros>
+      <macro>
+        <key>targets</key>
+        <value>Doorloop: Studieduur</value>
+      </macro>
+      <macro>
+        <key>filtercode</key>
+        <value>11,12,13</value>
+      </macro>
+      <macro>
+        <key>statistic</key>
+        <value>2</value>
+      </macro>
+    </macros>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="124" name="Load Datasets" width="90" x="78" y="34">
+        <parameter key="process_location" value="subprocesses/preprocessing/Load Datasets From Repository"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="124" name="Join Datasets" width="90" x="208" y="34">
+        <parameter key="process_location" value="subprocesses/preprocessing/Join Datasets"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+        <description align="left" color="transparent" colored="false" width="126">Output 1: all datasets&lt;br&gt;Output 2: IR&lt;br&gt;Output 3 IRA&lt;br&gt;Output 4: Only grades</description>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Python Select Attributes" width="90" x="328" y="34">
+        <parameter key="process_location" value="subprocesses/preprocessing/Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="targets" value="%{targets}"/>
+          <parameter key="filtercode" value="%{filtercode}"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="false"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set Target" width="90" x="445" y="34">
+        <parameter key="attribute_name" value="%{targets}"/>
+        <parameter key="target_role" value="label"/>
+        <list key="set_additional_roles">
+          <parameter key="Stamnummer student" value="id"/>
+        </list>
+      </operator>
+      <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="103" name="Attribute Selection Statistic" width="90" x="571" y="34">
+        <parameter key="select_which" value="%{statistic}"/>
+        <process expanded="true">
+          <operator activated="true" class="weight_by_correlation" compatibility="7.5.003" expanded="true" height="82" name="Weight by Correlation" width="90" x="131" y="34">
+            <parameter key="normalize_weights" value="false"/>
+            <parameter key="sort_weights" value="true"/>
+            <parameter key="sort_direction" value="ascending"/>
+            <parameter key="squared_correlation" value="false"/>
+          </operator>
+          <connect from_port="input 1" to_op="Weight by Correlation" to_port="example set"/>
+          <connect from_op="Weight by Correlation" from_port="weights" to_port="output 1"/>
+          <connect from_op="Weight by Correlation" from_port="example set" to_port="output 2"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="weight_by_chi_squared_statistic" compatibility="7.5.003" expanded="true" height="82" name="Weight by Chi Squared Statistic" width="90" x="119" y="34">
+            <parameter key="normalize_weights" value="false"/>
+            <parameter key="sort_weights" value="true"/>
+            <parameter key="sort_direction" value="ascending"/>
+            <parameter key="number_of_bins" value="10"/>
+          </operator>
+          <connect from_port="input 1" to_op="Weight by Chi Squared Statistic" to_port="example set"/>
+          <connect from_op="Weight by Chi Squared Statistic" from_port="weights" to_port="output 1"/>
+          <connect from_op="Weight by Chi Squared Statistic" from_port="example set" to_port="output 2"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="weight_by_information_gain" compatibility="7.5.003" expanded="true" height="82" name="Weight by Information Gain" width="90" x="101" y="34">
+            <parameter key="normalize_weights" value="false"/>
+            <parameter key="sort_weights" value="true"/>
+            <parameter key="sort_direction" value="ascending"/>
+          </operator>
+          <connect from_port="input 1" to_op="Weight by Information Gain" to_port="example set"/>
+          <connect from_op="Weight by Information Gain" from_port="weights" to_port="output 1"/>
+          <connect from_op="Weight by Information Gain" from_port="example set" to_port="output 2"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+        </process>
+      </operator>
+      <operator activated="true" class="weights_to_data" compatibility="7.5.003" expanded="true" height="68" name="Weights to Data" width="90" x="716" y="34"/>
+      <operator activated="true" class="sort" compatibility="7.5.003" expanded="true" height="82" name="Sort" width="90" x="830" y="34">
+        <parameter key="attribute_name" value="Weight"/>
+        <parameter key="sorting_direction" value="decreasing"/>
+      </operator>
+      <operator activated="true" class="text:data_to_json" compatibility="7.5.000" expanded="true" height="82" name="JSON Output" width="90" x="952" y="34">
+        <parameter key="ignore_arrays" value="false"/>
+        <parameter key="generate_array" value="true"/>
+        <parameter key="include_missing_values" value="true"/>
+      </operator>
+      <connect from_op="Load Datasets" from_port="result 1" to_op="Join Datasets" to_port="input 1"/>
+      <connect from_op="Load Datasets" from_port="result 2" to_op="Join Datasets" to_port="input 2"/>
+      <connect from_op="Load Datasets" from_port="result 3" to_op="Join Datasets" to_port="input 3"/>
+      <connect from_op="Load Datasets" from_port="result 4" to_op="Join Datasets" to_port="input 4"/>
+      <connect from_op="Join Datasets" from_port="result 1" to_op="Python Select Attributes" to_port="input 1"/>
+      <connect from_op="Python Select Attributes" from_port="result 1" to_op="Set Target" to_port="example set input"/>
+      <connect from_op="Set Target" from_port="example set output" to_op="Attribute Selection Statistic" to_port="input 1"/>
+      <connect from_op="Attribute Selection Statistic" from_port="output 1" to_op="Weights to Data" to_port="attribute weights"/>
+      <connect from_op="Weights to Data" from_port="example set" to_op="Sort" to_port="example set input"/>
+      <connect from_op="Sort" from_port="example set output" to_op="JSON Output" to_port="example set 1"/>
+      <connect from_op="JSON Output" from_port="documents" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>

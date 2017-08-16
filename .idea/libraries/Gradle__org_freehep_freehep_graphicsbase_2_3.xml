@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.freehep:freehep-graphicsbase:2.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.freehep/freehep-graphicsbase/2.3/a03abccb685009c08a912efdf27d4df53980d9d4/freehep-graphicsbase-2.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.freehep/freehep-graphicsbase/2.3/a9e0e82ed67f0eb9408f38c181691cf964f9907c/freehep-graphicsbase-2.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

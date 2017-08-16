@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros>
+      <macro>
+        <key>run_type</key>
+        <value>2</value>
+      </macro>
+      <macro>
+        <key>targets</key>
+        <value>Doorloop: Studieduur</value>
+      </macro>
+      <macro>
+        <key>filtercode</key>
+        <value>11</value>
+      </macro>
+      <macro>
+        <key>mapper</key>
+        <value>1</value>
+      </macro>
+      <macro>
+        <key>instrument</key>
+        <value>7</value>
+      </macro>
+      <macro>
+        <key>nom_num</key>
+        <value>2</value>
+      </macro>
+      <macro>
+        <key>modelname</key>
+        <value>instrument.model</value>
+      </macro>
+      <macro>
+        <key>statistic</key>
+        <value>1</value>
+      </macro>
+      <macro>
+        <key>A_BC_th</key>
+        <value>-1</value>
+      </macro>
+      <macro>
+        <key>C_AB_th</key>
+        <value>-1</value>
+      </macro>
+      <macro>
+        <key>studentids</key>
+        <value>all</value>
+      </macro>
+      <macro>
+        <key>input</key>
+        <value>1</value>
+      </macro>
+    </macros>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve IR_IRA" width="90" x="61" y="34">
+        <parameter key="repository_entry" value="datasets/IR_IRA"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve IR" width="90" x="61" y="107">
+        <parameter key="repository_entry" value="datasets/IR"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve IRA" width="90" x="63" y="181">
+        <parameter key="repository_entry" value="datasets/IRA"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Retrieve Grades" width="90" x="61" y="259">
+        <parameter key="repository_entry" value="datasets/Grades"/>
+      </operator>
+      <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="145" name="Select Input" width="90" x="324" y="34">
+        <parameter key="select_which" value="%{input}"/>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="source_input 4" spacing="0"/>
+          <portSpacing port="source_input 5" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 2" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="source_input 4" spacing="0"/>
+          <portSpacing port="source_input 5" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 3" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="source_input 4" spacing="0"/>
+          <portSpacing port="source_input 5" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 4" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="source_input 4" spacing="0"/>
+          <portSpacing port="source_input 5" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Python Attribute Select" width="90" x="498" y="34">
+        <parameter key="process_location" value="subprocesses/preprocessing/Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="targets" value="%{targets}"/>
+          <parameter key="filtercode" value="%{filtercode}"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="166" name="Run Type" width="90" x="659" y="34">
+        <parameter key="select_which" value="%{run_type}"/>
+        <process expanded="true">
+          <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="68" name="Execute AttributeSelection" width="90" x="102" y="34">
+            <parameter key="process_location" value="subprocesses/analysis/AttributeSelection"/>
+            <parameter key="use_input" value="true"/>
+            <parameter key="store_output" value="false"/>
+            <parameter key="propagate_metadata_recursively" value="true"/>
+            <parameter key="cache_process" value="true"/>
+            <list key="macros">
+              <parameter key="statistic" value="%{statistic}"/>
+              <parameter key="targets" value="%{targets}"/>
+            </list>
+            <parameter key="fail_for_unknown_macros" value="false"/>
+          </operator>
+          <connect from_port="input 1" to_op="Execute AttributeSelection" to_port="input 1"/>
+          <connect from_op="Execute AttributeSelection" from_port="result 1" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+          <portSpacing port="sink_output 4" spacing="0"/>
+          <portSpacing port="sink_output 5" spacing="0"/>
+          <portSpacing port="sink_output 6" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="generate_macro" compatibility="7.5.003" expanded="true" height="103" name="Set Predictor type" width="90" x="45" y="34">
+            <list key="function_descriptions">
+              <parameter key="predictor_type" value="if(parse(%{instrument}) &lt;= 6, 1,if(parse(%{instrument}) == 7, 2, if(parse(%{instrument}) == 8, 3, 4)))"/>
+            </list>
+          </operator>
+          <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="166" name="Select Prediction" width="90" x="172" y="34">
+            <parameter key="select_which" value="%{predictor_type}"/>
+            <process expanded="true">
+              <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Instrument Prediction" width="90" x="97" y="34">
+                <parameter key="process_location" value="subprocesses/instruments/predict/Instrument"/>
+                <parameter key="use_input" value="true"/>
+                <parameter key="store_output" value="false"/>
+                <parameter key="propagate_metadata_recursively" value="true"/>
+                <parameter key="cache_process" value="true"/>
+                <list key="macros">
+                  <parameter key="targets" value="%{targets}"/>
+                  <parameter key="filtercode" value="%{filtercode}"/>
+                  <parameter key="studentids" value="%{studentids}"/>
+                  <parameter key="mapper" value="%{mapper}"/>
+                  <parameter key="instrument" value="%{instrument}"/>
+                  <parameter key="modelname" value="%{modelname}"/>
+                  <parameter key="statistic" value="%{statistic}"/>
+                  <parameter key="nom_num" value="%{nom_num}"/>
+                </list>
+                <parameter key="fail_for_unknown_macros" value="false"/>
+              </operator>
+              <connect from_port="input 1" to_op="Instrument Prediction" to_port="input 1"/>
+              <connect from_op="Instrument Prediction" from_port="result 1" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+              <portSpacing port="sink_output 3" spacing="0"/>
+              <portSpacing port="sink_output 4" spacing="0"/>
+              <portSpacing port="sink_output 5" spacing="0"/>
+              <portSpacing port="sink_output 6" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="166" name="ROC Prediction" width="90" x="92" y="34">
+                <parameter key="process_location" value="subprocesses/instruments/predict/ROC"/>
+                <parameter key="use_input" value="true"/>
+                <parameter key="store_output" value="false"/>
+                <parameter key="propagate_metadata_recursively" value="true"/>
+                <parameter key="cache_process" value="true"/>
+                <list key="macros">
+                  <parameter key="targets" value="%{targets}"/>
+                  <parameter key="studentids" value="%{studentids}"/>
+                  <parameter key="filtercode" value="%{filtercode}"/>
+                  <parameter key="A_BC_th" value="%{A_BC_th}"/>
+                  <parameter key="C_AB_th" value="%{C_AB_th}"/>
+                </list>
+                <parameter key="fail_for_unknown_macros" value="false"/>
+              </operator>
+              <connect from_port="input 1" to_op="ROC Prediction" to_port="input 1"/>
+              <connect from_op="ROC Prediction" from_port="result 1" to_port="output 1"/>
+              <connect from_op="ROC Prediction" from_port="result 2" to_port="output 2"/>
+              <connect from_op="ROC Prediction" from_port="result 3" to_port="output 3"/>
+              <connect from_op="ROC Prediction" from_port="result 4" to_port="output 4"/>
+              <connect from_op="ROC Prediction" from_port="result 5" to_port="output 5"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+              <portSpacing port="sink_output 3" spacing="0"/>
+              <portSpacing port="sink_output 4" spacing="0"/>
+              <portSpacing port="sink_output 5" spacing="0"/>
+              <portSpacing port="sink_output 6" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Multistage Prediction" width="90" x="119" y="34">
+                <parameter key="process_location" value="subprocesses/instruments/predict/Multistage"/>
+                <parameter key="use_input" value="true"/>
+                <parameter key="store_output" value="false"/>
+                <parameter key="propagate_metadata_recursively" value="true"/>
+                <parameter key="cache_process" value="true"/>
+                <list key="macros"/>
+                <parameter key="fail_for_unknown_macros" value="true"/>
+              </operator>
+              <connect from_port="input 1" to_op="Multistage Prediction" to_port="input 1"/>
+              <connect from_op="Multistage Prediction" from_port="result 1" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+              <portSpacing port="sink_output 3" spacing="0"/>
+              <portSpacing port="sink_output 4" spacing="0"/>
+              <portSpacing port="sink_output 5" spacing="0"/>
+              <portSpacing port="sink_output 6" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="103" name="Clustering Prediction" width="90" x="99" y="34">
+                <parameter key="process_location" value="subprocesses/instruments/predict/Clustering"/>
+                <parameter key="use_input" value="true"/>
+                <parameter key="store_output" value="false"/>
+                <parameter key="propagate_metadata_recursively" value="true"/>
+                <parameter key="cache_process" value="true"/>
+                <list key="macros"/>
+                <parameter key="fail_for_unknown_macros" value="true"/>
+              </operator>
+              <connect from_port="input 1" to_op="Clustering Prediction" to_port="input 1"/>
+              <connect from_op="Clustering Prediction" from_port="result 2" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+              <portSpacing port="sink_output 3" spacing="0"/>
+              <portSpacing port="sink_output 4" spacing="0"/>
+              <portSpacing port="sink_output 5" spacing="0"/>
+              <portSpacing port="sink_output 6" spacing="0"/>
+            </process>
+          </operator>
+          <connect from_port="input 1" to_op="Set Predictor type" to_port="through 1"/>
+          <connect from_port="input 2" to_op="Set Predictor type" to_port="through 2"/>
+          <connect from_op="Set Predictor type" from_port="through 1" to_op="Select Prediction" to_port="input 1"/>
+          <connect from_op="Set Predictor type" from_port="through 2" to_op="Select Prediction" to_port="input 2"/>
+          <connect from_op="Select Prediction" from_port="output 1" to_port="output 1"/>
+          <connect from_op="Select Prediction" from_port="output 2" to_port="output 2"/>
+          <connect from_op="Select Prediction" from_port="output 3" to_port="output 3"/>
+          <connect from_op="Select Prediction" from_port="output 4" to_port="output 4"/>
+          <connect from_op="Select Prediction" from_port="output 5" to_port="output 5"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+          <portSpacing port="sink_output 4" spacing="0"/>
+          <portSpacing port="sink_output 5" spacing="0"/>
+          <portSpacing port="sink_output 6" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+          <portSpacing port="sink_output 4" spacing="0"/>
+          <portSpacing port="sink_output 5" spacing="0"/>
+          <portSpacing port="sink_output 6" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+          <portSpacing port="sink_output 3" spacing="0"/>
+          <portSpacing port="sink_output 4" spacing="0"/>
+          <portSpacing port="sink_output 5" spacing="0"/>
+          <portSpacing port="sink_output 6" spacing="0"/>
+        </process>
+      </operator>
+      <operator activated="true" class="text:data_to_json" compatibility="7.5.000" expanded="true" height="82" name="ROC C vs AB" width="90" x="857" y="391">
+        <parameter key="ignore_arrays" value="false"/>
+        <parameter key="generate_array" value="true"/>
+        <parameter key="include_missing_values" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">Note: this output is not shown but is available through API</description>
+      </operator>
+      <operator activated="true" class="text:data_to_json" compatibility="7.5.000" expanded="true" height="82" name="ROC A vs BC" width="90" x="859" y="218">
+        <parameter key="ignore_arrays" value="false"/>
+        <parameter key="generate_array" value="true"/>
+        <parameter key="include_missing_values" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">Note: this output is not shown but is available through API</description>
+      </operator>
+      <operator activated="true" class="text:data_to_json" compatibility="7.5.000" expanded="true" height="82" name="Predict Track" width="90" x="860" y="122">
+        <parameter key="ignore_arrays" value="false"/>
+        <parameter key="generate_array" value="true"/>
+        <parameter key="include_missing_values" value="false"/>
+      </operator>
+      <operator activated="true" class="text:data_to_json" compatibility="7.5.000" expanded="true" height="82" name="Generate output" width="90" x="859" y="34">
+        <parameter key="ignore_arrays" value="false"/>
+        <parameter key="generate_array" value="true"/>
+        <parameter key="include_missing_values" value="false"/>
+      </operator>
+      <connect from_op="Retrieve IR_IRA" from_port="output" to_op="Select Input" to_port="input 1"/>
+      <connect from_op="Retrieve IR" from_port="output" to_op="Select Input" to_port="input 2"/>
+      <connect from_op="Retrieve IRA" from_port="output" to_op="Select Input" to_port="input 3"/>
+      <connect from_op="Retrieve Grades" from_port="output" to_op="Select Input" to_port="input 4"/>
+      <connect from_op="Select Input" from_port="output 1" to_op="Python Attribute Select" to_port="input 1"/>
+      <connect from_op="Python Attribute Select" from_port="result 1" to_op="Run Type" to_port="input 1"/>
+      <connect from_op="Python Attribute Select" from_port="result 2" to_op="Run Type" to_port="input 2"/>
+      <connect from_op="Run Type" from_port="output 1" to_op="Generate output" to_port="example set 1"/>
+      <connect from_op="Run Type" from_port="output 2" to_op="Predict Track" to_port="example set 1"/>
+      <connect from_op="Run Type" from_port="output 3" to_op="ROC A vs BC" to_port="example set 1"/>
+      <connect from_op="Run Type" from_port="output 4" to_op="ROC C vs AB" to_port="example set 1"/>
+      <connect from_op="ROC C vs AB" from_port="documents" to_port="result 4"/>
+      <connect from_op="ROC A vs BC" from_port="documents" to_port="result 3"/>
+      <connect from_op="Predict Track" from_port="documents" to_port="result 2"/>
+      <connect from_op="Generate output" from_port="documents" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+      <portSpacing port="sink_result 4" spacing="0"/>
+      <portSpacing port="sink_result 5" spacing="0"/>
+    </process>
+  </operator>
+</process>

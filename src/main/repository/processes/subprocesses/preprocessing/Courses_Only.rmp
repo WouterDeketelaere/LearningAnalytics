@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros>
+      <macro>
+        <key>targets</key>
+        <value>Stamnummer student</value>
+      </macro>
+      <macro>
+        <key>filtercode</key>
+        <value>11</value>
+      </macro>
+    </macros>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Remove CSE's" width="90" x="313" y="187">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="CSE September|CSE Juni|CSE Januari"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="true"/>
+        <parameter key="include_special_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="68" name="Python Select Attributes (2)" width="90" x="313" y="34">
+        <parameter key="process_location" value="Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="targets" value="%{targets},Stamnummer student"/>
+          <parameter key="filtercode" value="10"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="false"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="68" name="Python Select Attributes" width="90" x="447" y="187">
+        <parameter key="process_location" value="Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="targets" value="Stamnummer student"/>
+          <parameter key="filtercode" value="%{filtercode}"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="false"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set ID &amp; Label" width="90" x="514" y="34">
+        <parameter key="attribute_name" value="Doorloop: Studieduur"/>
+        <parameter key="target_role" value="label"/>
+        <list key="set_additional_roles">
+          <parameter key="Stamnummer student" value="id"/>
+        </list>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set ID" width="90" x="581" y="187">
+        <parameter key="attribute_name" value="Stamnummer student"/>
+        <parameter key="target_role" value="id"/>
+        <list key="set_additional_roles"/>
+      </operator>
+      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join" width="90" x="715" y="34">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="true"/>
+        <list key="key_attributes"/>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <connect from_port="input 1" to_op="Python Select Attributes (2)" to_port="input 1"/>
+      <connect from_port="input 2" to_op="Remove CSE's" to_port="example set input"/>
+      <connect from_op="Remove CSE's" from_port="example set output" to_op="Python Select Attributes" to_port="input 1"/>
+      <connect from_op="Python Select Attributes (2)" from_port="result 1" to_op="Set ID &amp; Label" to_port="example set input"/>
+      <connect from_op="Python Select Attributes" from_port="result 1" to_op="Set ID" to_port="example set input"/>
+      <connect from_op="Set ID &amp; Label" from_port="example set output" to_op="Join" to_port="left"/>
+      <connect from_op="Set ID" from_port="example set output" to_op="Join" to_port="right"/>
+      <connect from_op="Join" from_port="join" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="source_input 2" spacing="0"/>
+      <portSpacing port="source_input 3" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>

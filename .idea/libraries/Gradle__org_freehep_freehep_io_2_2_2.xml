@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.freehep:freehep-io:2.2.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.freehep/freehep-io/2.2.2/da1929e034f70bcd88e4f24bc9cb399cbcead82d/freehep-io-2.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.freehep/freehep-io/2.2.2/b75446ad57f2627955bdc9a4035b9ba60f1a4f66/freehep-io-2.2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

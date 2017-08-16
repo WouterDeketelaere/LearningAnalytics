@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="82" name="Build Classes" width="90" x="447" y="34">
+        <parameter key="select_which" value="%{classes}"/>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="replace" compatibility="7.5.003" expanded="true" height="82" name="DvsRest" width="90" x="45" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="nominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="file_path"/>
+            <parameter key="block_type" value="single_value"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="single_value"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="replace_what" value="([-,\+][0,1,2])|(B{1})"/>
+            <parameter key="replace_by" value="+X"/>
+          </operator>
+          <connect from_port="input 1" to_op="DvsRest" to_port="example set input"/>
+          <connect from_op="DvsRest" from_port="example set output" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="replace" compatibility="7.5.003" expanded="true" height="82" name="B en D -&gt; BD" width="90" x="45" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="nominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="file_path"/>
+            <parameter key="block_type" value="single_value"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="single_value"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="replace_what" value="([B]{1})"/>
+            <parameter key="replace_by" value="D"/>
+          </operator>
+          <operator activated="true" class="replace" compatibility="7.5.003" expanded="true" height="82" name="+1,+2 -&gt; +12" width="90" x="45" y="187">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="nominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="file_path"/>
+            <parameter key="block_type" value="single_value"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="single_value"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="replace_what" value="([\+][1,2])"/>
+            <parameter key="replace_by" value="L"/>
+          </operator>
+          <operator activated="true" class="replace" compatibility="7.5.003" expanded="true" height="82" name="+1,+2 -&gt; +12 (2)" width="90" x="45" y="340">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="nominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="file_path"/>
+            <parameter key="block_type" value="single_value"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="single_value"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="replace_what" value="([-,\+][0,1])"/>
+            <parameter key="replace_by" value="G"/>
+          </operator>
+          <connect from_port="input 1" to_op="B en D -&gt; BD" to_port="example set input"/>
+          <connect from_op="B en D -&gt; BD" from_port="example set output" to_op="+1,+2 -&gt; +12" to_port="example set input"/>
+          <connect from_op="+1,+2 -&gt; +12" from_port="example set output" to_op="+1,+2 -&gt; +12 (2)" to_port="example set input"/>
+          <connect from_op="+1,+2 -&gt; +12 (2)" from_port="example set output" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+      </operator>
+      <connect from_port="input 1" to_op="Build Classes" to_port="input 1"/>
+      <connect from_op="Build Classes" from_port="output 1" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="source_input 2" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <description align="left" color="yellow" colored="false" height="50" resized="true" width="336" x="48" y="218">3) classes: 1 = multiclass, 2 = D vs Rest, 3 = G vs L vs D&lt;br&gt;</description>
+    </process>
+  </operator>
+</process>

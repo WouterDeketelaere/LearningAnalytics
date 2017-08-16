@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros>
+      <macro>
+        <key>targets</key>
+        <value>Doorloop: Studieduur</value>
+      </macro>
+      <macro>
+        <key>filtercode</key>
+        <value>11</value>
+      </macro>
+      <macro>
+        <key>mapper</key>
+        <value>3</value>
+      </macro>
+    </macros>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="124" name="Load Datasets" width="90" x="30" y="131">
+        <parameter key="process_location" value="subprocesses/preprocessing/Load Datasets From Repository"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="124" name="Join Sets" width="90" x="164" y="131">
+        <parameter key="process_location" value="subprocesses/preprocessing/Join Datasets"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Execute Python Attribute Select" width="90" x="306" y="132">
+        <parameter key="process_location" value="subprocesses/preprocessing/Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set Role" width="90" x="451" y="132">
+        <parameter key="attribute_name" value="Doorloop: Studieduur"/>
+        <parameter key="target_role" value="label"/>
+        <list key="set_additional_roles"/>
+      </operator>
+      <operator activated="false" class="subprocess" compatibility="7.5.003" expanded="true" height="103" name="ROC Target Mapper" width="90" x="412" y="402">
+        <process expanded="true">
+          <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply" width="90" x="77" y="84"/>
+          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Binary C-AB" width="90" x="274" y="153">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <list key="value_mappings">
+              <parameter key="-1" value="AB"/>
+              <parameter key="0" value="AB"/>
+              <parameter key="1" value="AB"/>
+              <parameter key="2" value="C"/>
+              <parameter key="B" value="C"/>
+              <parameter key="D" value="C"/>
+            </list>
+            <parameter key="consider_regular_expressions" value="false"/>
+            <parameter key="add_default_mapping" value="false"/>
+          </operator>
+          <operator activated="true" class="nominal_to_binominal" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Binominal (2)" width="90" x="475" y="153">
+            <parameter key="return_preprocessing_model" value="false"/>
+            <parameter key="create_view" value="false"/>
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="nominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="file_path"/>
+            <parameter key="block_type" value="single_value"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="single_value"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="transform_binominal" value="false"/>
+            <parameter key="use_underscore_in_name" value="false"/>
+          </operator>
+          <operator activated="true" class="remap_binominals" compatibility="7.5.003" expanded="true" height="82" name="Remap Binominals (2)" width="90" x="676" y="153">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="binominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="binominal"/>
+            <parameter key="block_type" value="value_matrix_start"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="negative_value" value="AB"/>
+            <parameter key="positive_value" value="C"/>
+          </operator>
+          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Binary A-BC" width="90" x="273" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <list key="value_mappings">
+              <parameter key="-1" value="A"/>
+              <parameter key="0" value="A"/>
+              <parameter key="1" value="BC"/>
+              <parameter key="2" value="BC"/>
+              <parameter key="B" value="BC"/>
+              <parameter key="D" value="BC"/>
+            </list>
+            <parameter key="consider_regular_expressions" value="false"/>
+            <parameter key="add_default_mapping" value="false"/>
+          </operator>
+          <operator activated="true" class="nominal_to_binominal" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Binominal" width="90" x="474" y="34">
+            <parameter key="return_preprocessing_model" value="false"/>
+            <parameter key="create_view" value="false"/>
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="nominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="file_path"/>
+            <parameter key="block_type" value="single_value"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="single_value"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="transform_binominal" value="false"/>
+            <parameter key="use_underscore_in_name" value="false"/>
+          </operator>
+          <operator activated="true" class="remap_binominals" compatibility="7.5.003" expanded="true" height="82" name="Remap Binominals" width="90" x="675" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="Doorloop: Studieduur"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="binominal"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="binominal"/>
+            <parameter key="block_type" value="value_matrix_start"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <parameter key="negative_value" value="BC"/>
+            <parameter key="positive_value" value="A"/>
+          </operator>
+          <connect from_port="in 1" to_op="Multiply" to_port="input"/>
+          <connect from_op="Multiply" from_port="output 1" to_op="Binary A-BC" to_port="example set input"/>
+          <connect from_op="Multiply" from_port="output 2" to_op="Binary C-AB" to_port="example set input"/>
+          <connect from_op="Binary C-AB" from_port="example set output" to_op="Nominal to Binominal (2)" to_port="example set input"/>
+          <connect from_op="Nominal to Binominal (2)" from_port="example set output" to_op="Remap Binominals (2)" to_port="example set input"/>
+          <connect from_op="Remap Binominals (2)" from_port="example set output" to_port="out 2"/>
+          <connect from_op="Binary A-BC" from_port="example set output" to_op="Nominal to Binominal" to_port="example set input"/>
+          <connect from_op="Nominal to Binominal" from_port="example set output" to_op="Remap Binominals" to_port="example set input"/>
+          <connect from_op="Remap Binominals" from_port="example set output" to_port="out 1"/>
+          <portSpacing port="source_in 1" spacing="0"/>
+          <portSpacing port="source_in 2" spacing="0"/>
+          <portSpacing port="sink_out 1" spacing="0"/>
+          <portSpacing port="sink_out 2" spacing="0"/>
+          <portSpacing port="sink_out 3" spacing="0"/>
+        </process>
+      </operator>
+      <operator activated="false" class="normalize" compatibility="7.5.003" expanded="true" height="103" name="Normalize" width="90" x="608" y="502">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value="CSE Januari"/>
+        <parameter key="attributes" value="CSE Januari"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="numeric"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="real"/>
+        <parameter key="block_type" value="value_series"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_series_end"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="method" value="range transformation"/>
+        <parameter key="min" value="0.0"/>
+        <parameter key="max" value="20.0"/>
+      </operator>
+      <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="82" name="Target Mapper" width="90" x="607" y="133">
+        <parameter key="select_which" value="%{mapper}"/>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Binary Map" width="90" x="112" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="%{targets}"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <list key="value_mappings">
+              <parameter key="D" value="D"/>
+              <parameter key="-1" value="ND"/>
+              <parameter key="0" value="ND"/>
+              <parameter key="1" value="ND"/>
+              <parameter key="2" value="ND"/>
+              <parameter key="B" value="ND"/>
+            </list>
+            <parameter key="consider_regular_expressions" value="false"/>
+            <parameter key="add_default_mapping" value="false"/>
+            <parameter key="default_value" value="Late"/>
+          </operator>
+          <connect from_port="input 1" to_op="Binary Map" to_port="example set input"/>
+          <connect from_op="Binary Map" from_port="example set output" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Ternary Map" width="90" x="76" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="%{targets}"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <list key="value_mappings">
+              <parameter key="D" value="D"/>
+              <parameter key="-1" value="O"/>
+              <parameter key="0" value="O"/>
+              <parameter key="1" value="L"/>
+              <parameter key="2" value="L"/>
+              <parameter key="B" value="L"/>
+            </list>
+            <parameter key="consider_regular_expressions" value="false"/>
+            <parameter key="add_default_mapping" value="false"/>
+            <parameter key="default_value" value="Late"/>
+          </operator>
+          <connect from_port="input 1" to_op="Ternary Map" to_port="example set input"/>
+          <connect from_op="Ternary Map" from_port="example set output" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Quadruple Map" width="90" x="73" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="%{targets}"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <list key="value_mappings">
+              <parameter key="D" value="D"/>
+              <parameter key="-1" value="O"/>
+              <parameter key="0" value="O"/>
+              <parameter key="1" value="L"/>
+              <parameter key="2" value="L"/>
+              <parameter key="B" value="L"/>
+            </list>
+            <parameter key="consider_regular_expressions" value="false"/>
+            <parameter key="add_default_mapping" value="false"/>
+            <parameter key="default_value" value="Late"/>
+          </operator>
+          <connect from_port="input 1" to_op="Quadruple Map" to_port="example set input"/>
+          <connect from_op="Quadruple Map" from_port="example set output" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Fiveclass Map" width="90" x="112" y="34">
+            <parameter key="attribute_filter_type" value="single"/>
+            <parameter key="attribute" value="%{targets}"/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="true"/>
+            <list key="value_mappings">
+              <parameter key="-1" value="O"/>
+              <parameter key="0" value="O"/>
+            </list>
+            <parameter key="consider_regular_expressions" value="false"/>
+            <parameter key="add_default_mapping" value="false"/>
+            <parameter key="default_value" value="Late"/>
+          </operator>
+          <connect from_port="input 1" to_op="Fiveclass Map" to_port="example set input"/>
+          <connect from_op="Fiveclass Map" from_port="example set output" to_port="output 1"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+          <portSpacing port="sink_output 2" spacing="0"/>
+        </process>
+        <description align="left" color="transparent" colored="false" width="126">1: no mapping&lt;br&gt;2: binary&lt;br&gt;3: ternary&lt;br&gt;4: quadruple&lt;br&gt;5: five classes</description>
+      </operator>
+      <operator activated="true" class="nominal_to_numerical" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Numerical" width="90" x="802" y="128">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="nominal"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="file_path"/>
+        <parameter key="block_type" value="single_value"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="single_value"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="coding_type" value="unique integers"/>
+        <parameter key="use_comparison_groups" value="false"/>
+        <list key="comparison_groups"/>
+        <parameter key="unexpected_value_handling" value="all 0 and warning"/>
+        <parameter key="use_underscore_in_name" value="false"/>
+      </operator>
+      <connect from_op="Load Datasets" from_port="result 1" to_op="Join Sets" to_port="input 1"/>
+      <connect from_op="Load Datasets" from_port="result 2" to_op="Join Sets" to_port="input 2"/>
+      <connect from_op="Load Datasets" from_port="result 3" to_op="Join Sets" to_port="input 3"/>
+      <connect from_op="Load Datasets" from_port="result 4" to_op="Join Sets" to_port="input 4"/>
+      <connect from_op="Join Sets" from_port="result 1" to_op="Execute Python Attribute Select" to_port="input 1"/>
+      <connect from_op="Execute Python Attribute Select" from_port="result 1" to_op="Set Role" to_port="example set input"/>
+      <connect from_op="Set Role" from_port="example set output" to_op="Target Mapper" to_port="input 1"/>
+      <connect from_op="Target Mapper" from_port="output 1" to_op="Nominal to Numerical" to_port="example set input"/>
+      <connect from_op="Nominal to Numerical" from_port="example set output" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>

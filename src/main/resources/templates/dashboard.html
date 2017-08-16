@@ -1,0 +1,165 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/html"
+      layout:decorator="base">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-2" th:replace="fragments/aside :: aside(index='dashboard')"></div>
+        <div class="col-lg-10">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h5>Dashboard</h5></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 text-justify">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#roctab">ROC Curves</a>
+                                    </li>
+                                    <li><a data-toggle="tab" href="#attributetab">Attribute Selection</a></li>
+                                    <li><a data-toggle="tab" href="#predicttab">Predict</a></li>
+                                    <!--<li><a data-toggle="tab" href="#traintab">Train Instruments</a></li>-->
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="roctab" class="tab-pane fade in active">
+                                        <div class="row top-buffer">
+                                            <div class="col-md-2">
+                                                <form id="roc_form_1" class="form-inline">
+                                                    <button id="avsbc" class="btn btn-default">A vs BC
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input id="roc1slider" data-provide="slider" data-slider-id='roc1slider'
+                                                       type="text" data-slider-min="0" data-slider-max="1"
+                                                       data-slider-step="0.05" data-slider-value="0.1"/>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <form id="roc_form_2" class="form-inline">
+                                                    <button id="cvsab" class="btn btn-default">C vs AB
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input id="roc2slider" data-provide="slider" data-slider-id='roc2slider'
+                                                       type="text" data-slider-min="0" data-slider-max="1"
+                                                       data-slider-step="0.05" data-slider-value="0.1"/>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div class="col-md-6">
+                                                <div id="roc1" class="roc"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="roc2" class="roc"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div class="col-md-12">
+                                                <div id="sankeychart" class="roc"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="attributetab" class="tab-pane fade">
+                                        <div class="row top-buffer">
+                                            <div class="col-md-1">
+                                                <button id="weights_btn" class="btn btn-default" type="submit">Show
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-control" required name="mechanism" id="statistic">
+                                                    <option value="0">select statistic</option>
+                                                    <option th:each="mechanism: ${mechanisms}"
+                                                            th:value="${mechanism.id}"
+                                                            th:text="${mechanism.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-control" required name="dataset" id="dataset">
+                                                    <option value="0">select dataset</option>
+                                                    <option th:each="dataset: ${datasets}"
+                                                            th:value="${dataset.id}"
+                                                            th:text="${dataset.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input id="fc_slider_attribute" type="text"
+                                                       data-provide="slider" data-slider-tooltip="hide"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                                                       data-slider-ticks-labels="[11, 12, 13, 21, 22, 23,31,32,33]"
+                                                       data-slider-ticks-snap-bounds="60"/>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div class="col-md-12">
+                                                <div class="attributeweights"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="predicttab" class="tab-pane fade">
+                                        <div class="row top-buffer">
+                                            <div class="col-md-6">
+                                                <!--<form id="predict_form">-->
+                                                <div>
+                                                    <label for="predict_studentids">Student ids</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" id="predict_studentids" name="studentids">
+                                                </div>
+                                                <div>
+                                                    <select class="form-control" required name="instrument"
+                                                            id="instrument">
+                                                        <option value="0">Select instrument</option>
+                                                        <option th:each="instrument: ${instruments}"
+                                                                th:value="${instrument.id}"
+                                                                th:text="${instrument.name}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <input id=outcome_slider" type="text"
+                                                           data-provide="slider" data-slider-tooltip="hide"
+                                                           data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                           data-slider-ticks-labels="['All', 'Two', 'Three', 'Four', 'Five']"
+                                                           data-slider-ticks-snap-bounds="60"/>
+                                                </div>
+                                                <div>
+                                                    <input id=fc_slider_predict" type="text"
+                                                           data-provide="slider" data-slider-tooltip="hide"
+                                                           data-slider-ticks="[1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                                                           data-slider-ticks-labels="['11', '12', '13', '21', '22', '23','31','32','33']"
+                                                           data-slider-ticks-snap-bounds="60"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div class="col-md-12">
+                                                <div id="predictionchart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div id="traintab" class="tab-pane fade">
+                                        <h3>Predict</h3>
+                                    </div>-->
+                                </div> <!-- end tab -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script src="js/attributeweighting.js" th:src="@{/js/attributeweighting.js}"></script>
+    <script src="js/predictionchart.js" th:src="@{/js/predictionchart.js}"></script>
+    <script src="js/sankey.js" th:src="@{/js/sankey.js}"></script>
+    <script src="js/sankeychart.js" th:src="@{/js/sankeychart.js}"></script>
+</th:block>
+</body>
+</html>

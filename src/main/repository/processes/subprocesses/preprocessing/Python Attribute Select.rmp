@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+  <context>
+    <input/>
+    <output/>
+    <macros>
+      <macro>
+        <key>targets</key>
+        <value>Doorloop: Studieduur</value>
+      </macro>
+      <macro>
+        <key>filtercode</key>
+        <value>11</value>
+      </macro>
+    </macros>
+  </context>
+  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="read_excel" compatibility="7.5.003" expanded="true" height="68" name="Read Filter codes" width="90" x="55" y="105">
+        <parameter key="excel_file" value="/home/wouter/Google Drive/Master AI/Thesis/Code/Repository/data/Data Analyse.xlsx"/>
+        <parameter key="sheet_number" value="5"/>
+        <parameter key="imported_cell_range" value="A1:Z171"/>
+        <parameter key="encoding" value="SYSTEM"/>
+        <parameter key="first_row_as_names" value="false"/>
+        <list key="annotations">
+          <parameter key="0" value="Name"/>
+        </list>
+        <parameter key="date_format" value=""/>
+        <parameter key="time_zone" value="SYSTEM"/>
+        <parameter key="locale" value="English (United States)"/>
+        <list key="data_set_meta_data_information">
+          <parameter key="0" value="Attribute.true.polynominal.attribute"/>
+          <parameter key="1" value="Description.true.polynominal.attribute"/>
+          <parameter key="2" value="Study Credit.true.integer.attribute"/>
+          <parameter key="3" value="Programme.true.polynominal.attribute"/>
+          <parameter key="4" value="Phase.true.integer.attribute"/>
+          <parameter key="5" value="Semester.true.integer.attribute"/>
+          <parameter key="6" value="Filter Code.true.polynominal.attribute"/>
+          <parameter key="7" value="H.true.attribute_value.attribute"/>
+          <parameter key="8" value="I.true.attribute_value.attribute"/>
+          <parameter key="9" value="J.true.attribute_value.attribute"/>
+          <parameter key="10" value="K.true.attribute_value.attribute"/>
+          <parameter key="11" value="L.true.attribute_value.attribute"/>
+          <parameter key="12" value="M.true.attribute_value.attribute"/>
+          <parameter key="13" value="N.true.attribute_value.attribute"/>
+          <parameter key="14" value="O.true.attribute_value.attribute"/>
+          <parameter key="15" value="P.true.attribute_value.attribute"/>
+          <parameter key="16" value="Q.true.attribute_value.attribute"/>
+          <parameter key="17" value="R.true.attribute_value.attribute"/>
+          <parameter key="18" value="S.true.attribute_value.attribute"/>
+          <parameter key="19" value="T.true.attribute_value.attribute"/>
+          <parameter key="20" value="U.true.attribute_value.attribute"/>
+          <parameter key="21" value="V.true.attribute_value.attribute"/>
+          <parameter key="22" value="W.true.attribute_value.attribute"/>
+          <parameter key="23" value="X.true.attribute_value.attribute"/>
+          <parameter key="24" value="Y.true.attribute_value.attribute"/>
+          <parameter key="25" value="Z.true.attribute_value.attribute"/>
+        </list>
+        <parameter key="read_not_matching_values_as_missings" value="true"/>
+        <parameter key="datamanagement" value="double_array"/>
+        <parameter key="data_management" value="auto"/>
+      </operator>
+      <operator activated="true" class="python_scripting:execute_python" compatibility="7.4.000" expanded="true" height="103" name="Python Script" width="90" x="189" y="34">
+        <parameter key="script" value="import pandas as pd&#10;&#10;# rm_main is a mandatory function, &#10;# the number of arguments has to be the number of input ports (can be none)&#10;def rm_main(data,meta_data):&#10;    # output can be found in Log View    &#10;    # meta_data = pd.read_excel(&quot;/home/wouter/Google Drive/Master AI/Thesis/Code/Repository/data/Data Analyse.xlsx&quot;,sheetname='RapidminerWeights')&#10;    # filtercode = '11'&#10;    # targets = 'Doorloop: Studieduur'&#10;    # your code goes here&#10;    # transform input into lists&#10;    targets = '%{targets}'&#10;    targets = targets.split(&quot;,&quot;)&#10;    filtercode = '%{filtercode}'&#10;    filtercode = filtercode.split(&quot;,&quot;)&#10;   &#10;    selected_attributes = meta_data.loc[(meta_data['Attribute'].isin(targets)) | (meta_data['Filter Code'].isin(filtercode))]['Attribute']&#10;&#10;    #for example:&#10;    filter = list(set(data.columns.values).intersection(selected_attributes))&#10;    data2 = data[filter]&#10;&#10;    # connect 2 output ports to see the results&#10;    return data2, data"/>
+      </operator>
+      <connect from_port="input 1" to_op="Python Script" to_port="input 1"/>
+      <connect from_op="Read Filter codes" from_port="output" to_op="Python Script" to_port="input 2"/>
+      <connect from_op="Python Script" from_port="output 1" to_port="result 1"/>
+      <connect from_op="Python Script" from_port="output 2" to_port="result 2"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="source_input 2" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+    </process>
+  </operator>
+</process>
