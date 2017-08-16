@@ -48,7 +48,7 @@ dependencies {
 
     // rapid miner dependencies
     compile(group: 'com.rapidminer.studio', name: 'rapidminer-studio-core', version: '7.5.3')
-    compile files('/opt/rapidminer/lib/plugins/rmx_text-ANY-7.5.0.jar')
+    compile files('lib/rmx_text-ANY-7.5.0.jar')
 
     // spring boot dependencies
     compile("org.springframework.boot:spring-boot-devtools")

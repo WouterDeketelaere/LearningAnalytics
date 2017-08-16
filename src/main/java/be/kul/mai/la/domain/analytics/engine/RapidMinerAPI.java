@@ -46,7 +46,7 @@ public class RapidMinerAPI {
         this.processListener = processListener;
         processFile = baseProcessLocation + processName;
         RapidMiner.setExecutionMode(RapidMiner.ExecutionMode.COMMAND_LINE);
-        Plugin.addAdditionalExtensionDir("/opt/rapidminer/lib/plugins");
+        Plugin.addAdditionalExtensionDir("lib");
         Plugin.setInitPlugins(true);
         RapidMiner.init();
         createProcess();
