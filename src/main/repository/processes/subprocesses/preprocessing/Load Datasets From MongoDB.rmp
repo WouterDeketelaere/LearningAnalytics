@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.000">
   <context>
     <input/>
     <output/>
     <macros/>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.000" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -12,7 +12,7 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.5.000" expanded="true" height="103" name="STELA Doorloop" width="90" x="112" y="34">
+      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.6.000" expanded="true" height="103" name="STELA Doorloop" width="90" x="112" y="34">
         <parameter key="mongodb_instance" value="Localhost"/>
         <parameter key="collection" value="doorloopgegevens_2009_2010"/>
         <parameter key="sort_documents" value="false"/>
@@ -24,7 +24,7 @@
         <parameter key="limit_attributes" value="false"/>
         <parameter key="skip_invalid_documents" value="false"/>
       </operator>
-      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.5.000" expanded="true" height="103" name="STELA Januari" width="90" x="109" y="144">
+      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.6.000" expanded="true" height="103" name="STELA Januari" width="90" x="109" y="144">
         <parameter key="mongodb_instance" value="Localhost"/>
         <parameter key="collection" value="scores_2009_2010_transposed_jan"/>
         <parameter key="sort_documents" value="false"/>
@@ -36,7 +36,7 @@
         <parameter key="limit_attributes" value="false"/>
         <parameter key="skip_invalid_documents" value="false"/>
       </operator>
-      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.5.000" expanded="true" height="103" name="STELA Juni" width="90" x="109" y="255">
+      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.6.000" expanded="true" height="103" name="STELA Juni" width="90" x="109" y="255">
         <parameter key="mongodb_instance" value="Localhost"/>
         <parameter key="collection" value="scores_2009_2010_transposed_juni"/>
         <parameter key="sort_documents" value="false"/>
@@ -48,7 +48,7 @@
         <parameter key="limit_attributes" value="false"/>
         <parameter key="skip_invalid_documents" value="false"/>
       </operator>
-      <operator activated="true" class="remove_duplicates" compatibility="7.5.003" expanded="true" height="103" name="Remove Duplicates (3)" width="90" x="374" y="255">
+      <operator activated="true" class="remove_duplicates" compatibility="7.6.000" expanded="true" height="103" name="Remove Duplicates (3)" width="90" x="374" y="255">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Stamnummer student"/>
         <parameter key="attributes" value=""/>
@@ -63,7 +63,7 @@
         <parameter key="include_special_attributes" value="true"/>
         <parameter key="treat_missing_values_as_duplicates" value="false"/>
       </operator>
-      <operator activated="true" class="remove_duplicates" compatibility="7.5.003" expanded="true" height="103" name="Remove Duplicates" width="90" x="377" y="34">
+      <operator activated="true" class="remove_duplicates" compatibility="7.6.000" expanded="true" height="103" name="Remove Duplicates" width="90" x="377" y="34">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Stamnummer student"/>
         <parameter key="attributes" value=""/>
@@ -78,7 +78,7 @@
         <parameter key="include_special_attributes" value="true"/>
         <parameter key="treat_missing_values_as_duplicates" value="false"/>
       </operator>
-      <operator activated="true" class="replace" compatibility="7.5.003" expanded="true" height="82" name="Replace" width="90" x="505" y="34">
+      <operator activated="true" class="replace" compatibility="7.6.000" expanded="true" height="82" name="Replace" width="90" x="505" y="34">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Jaar X: Deregistratiedatum"/>
         <parameter key="attributes" value=""/>
@@ -94,7 +94,7 @@
         <parameter key="replace_what" value="#"/>
         <parameter key="replace_by" value="01.07.2018"/>
       </operator>
-      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Remove Mongo ID" width="90" x="633" y="34">
+      <operator activated="true" class="select_attributes" compatibility="7.6.000" expanded="true" height="82" name="Remove Mongo ID" width="90" x="633" y="34">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="_id.$oid"/>
         <parameter key="attributes" value=""/>
@@ -108,7 +108,7 @@
         <parameter key="invert_selection" value="true"/>
         <parameter key="include_special_attributes" value="false"/>
       </operator>
-      <operator activated="true" class="remove_duplicates" compatibility="7.5.003" expanded="true" height="103" name="Remove Duplicates (2)" width="90" x="374" y="144">
+      <operator activated="true" class="remove_duplicates" compatibility="7.6.000" expanded="true" height="103" name="Remove Duplicates (2)" width="90" x="374" y="144">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Stamnummer student"/>
         <parameter key="attributes" value=""/>
@@ -123,7 +123,7 @@
         <parameter key="include_special_attributes" value="true"/>
         <parameter key="treat_missing_values_as_duplicates" value="false"/>
       </operator>
-      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.5.000" expanded="true" height="103" name="STELA Sept" width="90" x="110" y="374">
+      <operator activated="true" class="nosql:mongodb_document_reader" compatibility="7.6.000" expanded="true" height="103" name="STELA Sept" width="90" x="110" y="374">
         <parameter key="mongodb_instance" value="Localhost"/>
         <parameter key="collection" value="scores_2009_2010_transposed_sep"/>
         <parameter key="sort_documents" value="false"/>
@@ -135,7 +135,7 @@
         <parameter key="limit_attributes" value="false"/>
         <parameter key="skip_invalid_documents" value="false"/>
       </operator>
-      <operator activated="true" class="remove_duplicates" compatibility="7.5.003" expanded="true" height="103" name="Remove Duplicates (4)" width="90" x="375" y="374">
+      <operator activated="true" class="remove_duplicates" compatibility="7.6.000" expanded="true" height="103" name="Remove Duplicates (4)" width="90" x="375" y="374">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Stamnummer student"/>
         <parameter key="attributes" value=""/>
@@ -150,7 +150,7 @@
         <parameter key="include_special_attributes" value="true"/>
         <parameter key="treat_missing_values_as_duplicates" value="false"/>
       </operator>
-      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Remove Mongo ID (3)" width="90" x="630" y="255">
+      <operator activated="true" class="select_attributes" compatibility="7.6.000" expanded="true" height="82" name="Remove Mongo ID (3)" width="90" x="630" y="255">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="_id.$oid"/>
         <parameter key="attributes" value=""/>
@@ -164,7 +164,7 @@
         <parameter key="invert_selection" value="true"/>
         <parameter key="include_special_attributes" value="false"/>
       </operator>
-      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Remove Mongo ID (4)" width="90" x="631" y="374">
+      <operator activated="true" class="select_attributes" compatibility="7.6.000" expanded="true" height="82" name="Remove Mongo ID (4)" width="90" x="631" y="374">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="_id.$oid"/>
         <parameter key="attributes" value=""/>
@@ -178,22 +178,22 @@
         <parameter key="invert_selection" value="true"/>
         <parameter key="include_special_attributes" value="false"/>
       </operator>
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set ID" width="90" x="767" y="34">
+      <operator activated="true" class="set_role" compatibility="7.6.000" expanded="true" height="82" name="Set ID" width="90" x="767" y="34">
         <parameter key="attribute_name" value="Stamnummer student"/>
         <parameter key="target_role" value="id"/>
         <list key="set_additional_roles"/>
       </operator>
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set ID (3)" width="90" x="764" y="255">
+      <operator activated="true" class="set_role" compatibility="7.6.000" expanded="true" height="82" name="Set ID (3)" width="90" x="764" y="255">
         <parameter key="attribute_name" value="Stamnummer student"/>
         <parameter key="target_role" value="id"/>
         <list key="set_additional_roles"/>
       </operator>
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set ID (4)" width="90" x="765" y="374">
+      <operator activated="true" class="set_role" compatibility="7.6.000" expanded="true" height="82" name="Set ID (4)" width="90" x="765" y="374">
         <parameter key="attribute_name" value="Stamnummer student"/>
         <parameter key="target_role" value="id"/>
         <list key="set_additional_roles"/>
       </operator>
-      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Remove Mongo ID (2)" width="90" x="630" y="144">
+      <operator activated="true" class="select_attributes" compatibility="7.6.000" expanded="true" height="82" name="Remove Mongo ID (2)" width="90" x="630" y="144">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="_id.$oid"/>
         <parameter key="attributes" value=""/>
@@ -207,7 +207,7 @@
         <parameter key="invert_selection" value="true"/>
         <parameter key="include_special_attributes" value="false"/>
       </operator>
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set ID (2)" width="90" x="764" y="144">
+      <operator activated="true" class="set_role" compatibility="7.6.000" expanded="true" height="82" name="Set ID (2)" width="90" x="764" y="144">
         <parameter key="attribute_name" value="Stamnummer student"/>
         <parameter key="target_role" value="id"/>
         <list key="set_additional_roles"/>

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.001">
   <context>
     <input/>
     <output/>
     <macros/>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -12,18 +12,23 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Load Instrument Model" width="90" x="381" y="150">
+      <operator activated="true" class="generate_macro" compatibility="7.6.001" expanded="true" height="82" name="Set modelname" width="90" x="55" y="34">
+        <list key="function_descriptions">
+          <parameter key="modelname" value="if(equals(%{modelname},&quot;instrument.model&quot;),replaceAll(concat(%{targets},&quot;_&quot;,%{mapper}, &quot;_&quot;,%{filtercode},&quot;_&quot;, %{instrument},&quot;_&quot;,%{nom_num},&quot;_&quot;,%{statistic},&quot;_&quot;, %{comprehensive},&quot;_&quot;, %{type}),&quot;( |:|,)&quot;,&quot;_&quot;),%{modelname})"/>
+        </list>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.6.001" expanded="true" height="68" name="Load Instrument Model" width="90" x="381" y="150">
         <parameter key="repository_entry" value="../../../../data/models/%{modelname}"/>
       </operator>
-      <operator activated="true" class="subprocess" compatibility="7.5.003" expanded="true" height="82" name="Filter students" width="90" x="175" y="34">
+      <operator activated="true" class="subprocess" compatibility="7.6.001" expanded="true" height="82" name="Filter students" width="90" x="236" y="34">
         <process expanded="true">
-          <operator activated="true" class="generate_attributes" compatibility="7.5.003" expanded="true" height="82" name="Generate Nominal ID" width="90" x="107" y="34">
+          <operator activated="true" class="generate_attributes" compatibility="7.6.001" expanded="true" height="82" name="Generate Nominal ID" width="90" x="107" y="34">
             <list key="function_descriptions">
               <parameter key="StudentID" value="[Stamnummer student]"/>
             </list>
             <parameter key="keep_all" value="true"/>
           </operator>
-          <operator activated="true" class="numerical_to_polynominal" compatibility="7.5.003" expanded="true" height="82" name="Change ID to Nominal" width="90" x="256" y="34">
+          <operator activated="true" class="numerical_to_polynominal" compatibility="7.6.001" expanded="true" height="82" name="Change ID to Nominal" width="90" x="256" y="34">
             <parameter key="attribute_filter_type" value="single"/>
             <parameter key="attribute" value="StudentID"/>
             <parameter key="attributes" value=""/>
@@ -37,7 +42,7 @@
             <parameter key="invert_selection" value="false"/>
             <parameter key="include_special_attributes" value="true"/>
           </operator>
-          <operator activated="true" class="filter_examples" compatibility="7.5.003" expanded="true" height="103" name="Filter" width="90" x="466" y="34">
+          <operator activated="true" class="filter_examples" compatibility="7.6.001" expanded="true" height="103" name="Filter" width="90" x="466" y="34">
             <parameter key="parameter_expression" value=""/>
             <parameter key="condition_class" value="custom_filters"/>
             <parameter key="invert_filter" value="false"/>
@@ -47,12 +52,12 @@
             <parameter key="filters_logic_and" value="true"/>
             <parameter key="filters_check_metadata" value="true"/>
           </operator>
-          <operator activated="true" class="generate_macro" compatibility="7.5.003" expanded="true" height="103" name="Selected/All" width="90" x="626" y="34">
+          <operator activated="true" class="generate_macro" compatibility="7.6.001" expanded="true" height="103" name="Selected/All" width="90" x="626" y="34">
             <list key="function_descriptions">
               <parameter key="selected" value="if(equals(%{studentids},&quot;all&quot;),2,1)"/>
             </list>
           </operator>
-          <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="103" name="Selected vs All Students" width="90" x="769" y="34">
+          <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="103" name="Selected vs All Students" width="90" x="769" y="34">
             <parameter key="select_which" value="%{selected}"/>
             <process expanded="true">
               <connect from_port="input 1" to_port="output 1"/>
@@ -85,7 +90,7 @@
           <portSpacing port="sink_out 2" spacing="0"/>
         </process>
       </operator>
-      <operator activated="true" class="select_subprocess" compatibility="7.5.003" expanded="true" height="82" name="Nominal/Numerical" width="90" x="385" y="34">
+      <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="82" name="Nominal/Numerical" width="90" x="385" y="34">
         <parameter key="select_which" value="%{nom_num}"/>
         <process expanded="true">
           <connect from_port="input 1" to_port="output 1"/>
@@ -95,7 +100,7 @@
           <portSpacing port="sink_output 2" spacing="0"/>
         </process>
         <process expanded="true">
-          <operator activated="true" class="nominal_to_numerical" compatibility="7.5.003" expanded="true" height="103" name="To Numerical without StudentID" width="90" x="132" y="34">
+          <operator activated="true" class="nominal_to_numerical" compatibility="7.6.001" expanded="true" height="103" name="To Numerical without StudentID" width="90" x="132" y="34">
             <parameter key="return_preprocessing_model" value="false"/>
             <parameter key="create_view" value="false"/>
             <parameter key="attribute_filter_type" value="single"/>
@@ -110,7 +115,7 @@
             <parameter key="except_block_type" value="single_value"/>
             <parameter key="invert_selection" value="true"/>
             <parameter key="include_special_attributes" value="false"/>
-            <parameter key="coding_type" value="dummy coding"/>
+            <parameter key="coding_type" value="unique integers"/>
             <parameter key="use_comparison_groups" value="false"/>
             <list key="comparison_groups"/>
             <parameter key="unexpected_value_handling" value="all 0 and warning"/>
@@ -124,11 +129,11 @@
           <portSpacing port="sink_output 2" spacing="0"/>
         </process>
       </operator>
-      <operator activated="true" class="apply_model" compatibility="7.5.003" expanded="true" height="82" name="Apply Instrument Model" width="90" x="552" y="34">
+      <operator activated="true" class="apply_model" compatibility="7.6.001" expanded="true" height="82" name="Apply Instrument Model" width="90" x="552" y="34">
         <list key="application_parameters"/>
         <parameter key="create_view" value="false"/>
       </operator>
-      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Extract predictions" width="90" x="697" y="34">
+      <operator activated="true" class="select_attributes" compatibility="7.6.001" expanded="true" height="82" name="Extract predictions" width="90" x="697" y="34">
         <parameter key="attribute_filter_type" value="regular_expression"/>
         <parameter key="attribute" value=""/>
         <parameter key="attributes" value=""/>
@@ -143,7 +148,8 @@
         <parameter key="invert_selection" value="false"/>
         <parameter key="include_special_attributes" value="true"/>
       </operator>
-      <connect from_port="input 1" to_op="Filter students" to_port="in 1"/>
+      <connect from_port="input 1" to_op="Set modelname" to_port="through 1"/>
+      <connect from_op="Set modelname" from_port="through 1" to_op="Filter students" to_port="in 1"/>
       <connect from_op="Load Instrument Model" from_port="output" to_op="Apply Instrument Model" to_port="model"/>
       <connect from_op="Filter students" from_port="out 1" to_op="Nominal/Numerical" to_port="input 1"/>
       <connect from_op="Nominal/Numerical" from_port="output 1" to_op="Apply Instrument Model" to_port="unlabelled data"/>

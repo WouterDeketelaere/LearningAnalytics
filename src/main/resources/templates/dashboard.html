@@ -8,8 +8,8 @@
 <body>
 <div layout:fragment="content">
     <div class="row">
-        <div class="col-lg-2" th:replace="fragments/aside :: aside(index='dashboard')"></div>
-        <div class="col-lg-10">
+        <!--<div class="col-lg-2" th:replace="fragments/aside :: aside(index='dashboard')"></div>-->
+        <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading"><h5>Dashboard</h5></div>
                 <div class="panel-body">
@@ -22,7 +22,7 @@
                                     </li>
                                     <li><a data-toggle="tab" href="#attributetab">Attribute Selection</a></li>
                                     <li><a data-toggle="tab" href="#predicttab">Predict</a></li>
-                                    <!--<li><a data-toggle="tab" href="#traintab">Train Instruments</a></li>-->
+                                    <li><a data-toggle="tab" href="#clusterstab">Cluster Analysis</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div id="roctab" class="tab-pane fade in active">
@@ -66,32 +66,46 @@
                                     </div>
                                     <div id="attributetab" class="tab-pane fade">
                                         <div class="row top-buffer">
-                                            <div class="col-md-1">
-                                                <button id="weights_btn" class="btn btn-default" type="submit">Show
-                                                </button>
+                                            <div class="col-md-10">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="input">Select dataset</label>
+                                                        <select class="form-control chosen" required name="input"
+                                                                id="input">
+                                                            <option value="0">select dataset</option>
+                                                            <option th:each="dataset: ${datasets}"
+                                                                    th:value="${dataset.id}"
+                                                                    th:text="${dataset.name}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="attr_statistic">Select statistic</label>
+                                                        <select class="form-control chosen" required name="mechanism"
+                                                                id="attr_statistic">
+                                                            <option value="0">select statistic</option>
+                                                            <option th:each="mechanism: ${mechanisms}"
+                                                                    th:value="${mechanism.id}"
+                                                                    th:text="${mechanism.name}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row top-buffer">
+                                                    <div class="col-md-6"
+                                                         th:replace="fragments/filtercodes :: filtercodes(val='fc_attr')"></div>
+                                                    <div class="col-md-6">
+                                                        <label for="attr_comprehensive">Separate resit grades</label>
+                                                        <div>
+                                                            <input type="checkbox" id="attr_comprehensive"
+                                                                   data-toggle="toggle"
+                                                                   data-on="Include" data-off="Exclude" data-size="mini"
+                                                                   data-onstyle="success" data-offstyle="danger"
+                                                                   data-width="100" data-height="25">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <select class="form-control" required name="mechanism" id="statistic">
-                                                    <option value="0">select statistic</option>
-                                                    <option th:each="mechanism: ${mechanisms}"
-                                                            th:value="${mechanism.id}"
-                                                            th:text="${mechanism.name}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select class="form-control" required name="dataset" id="dataset">
-                                                    <option value="0">select dataset</option>
-                                                    <option th:each="dataset: ${datasets}"
-                                                            th:value="${dataset.id}"
-                                                            th:text="${dataset.name}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <input id="fc_slider_attribute" type="text"
-                                                       data-provide="slider" data-slider-tooltip="hide"
-                                                       data-slider-ticks="[1, 2, 3, 4, 5, 6, 7, 8, 9]"
-                                                       data-slider-ticks-labels="[11, 12, 13, 21, 22, 23,31,32,33]"
-                                                       data-slider-ticks-snap-bounds="60"/>
+                                            <div class="col-md-2">
+                                                <button id="weights_btn" class="btn btn-default">Show</button>
                                             </div>
                                         </div>
                                         <div class="row top-buffer">
@@ -102,16 +116,10 @@
                                     </div>
                                     <div id="predicttab" class="tab-pane fade">
                                         <div class="row top-buffer">
-                                            <div class="col-md-6">
-                                                <!--<form id="predict_form">-->
+                                            <div class="col-md-3">
+                                                <label for="instrument">Select instrument</label>
                                                 <div>
-                                                    <label for="predict_studentids">Student ids</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" id="predict_studentids" name="studentids">
-                                                </div>
-                                                <div>
-                                                    <select class="form-control" required name="instrument"
+                                                    <select class="form-control chosen" required name="instrument"
                                                             id="instrument">
                                                         <option value="0">Select instrument</option>
                                                         <option th:each="instrument: ${instruments}"
@@ -120,21 +128,42 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
+                                                <label for="pred_statistic">Select statistic</label>
+                                                <select class="form-control chosen" required name="mechanism"
+                                                        id="pred_statistic">
+                                                    <option value="0">select statistic</option>
+                                                    <option th:each="mechanism: ${mechanisms}"
+                                                            th:value="${mechanism.id}"
+                                                            th:text="${mechanism.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="predict_comprehensive">Separate resit grades</label>
                                                 <div>
-                                                    <input id=outcome_slider" type="text"
-                                                           data-provide="slider" data-slider-tooltip="hide"
-                                                           data-slider-ticks="[1, 2, 3, 4, 5]"
-                                                           data-slider-ticks-labels="['All', 'Two', 'Three', 'Four', 'Five']"
-                                                           data-slider-ticks-snap-bounds="60"/>
+                                                    <input type="checkbox" id="predict_comprehensive"
+                                                           data-toggle="toggle"
+                                                           data-on="Include" data-off="Exclude" data-size="mini"
+                                                           data-onstyle="success" data-offstyle="danger"
+                                                           data-width="100" data-height="25">
                                                 </div>
-                                                <div>
-                                                    <input id=fc_slider_predict" type="text"
-                                                           data-provide="slider" data-slider-tooltip="hide"
-                                                           data-slider-ticks="[1, 2, 3, 4, 5, 6, 7, 8, 9]"
-                                                           data-slider-ticks-labels="['11', '12', '13', '21', '22', '23','31','32','33']"
-                                                           data-slider-ticks-snap-bounds="60"/>
-                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="predict_studentids">Student ids</label>
+                                                <select class="form-control chosen" required name="students"
+                                                        id="predict_studentids">
+                                                    <option value="0">Select student id</option>
+                                                    <option th:each="student: ${studentids}"
+                                                            th:value="${student.id}"
+                                                            th:text="${student.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div th:replace="fragments/filtercodes :: filtercodes(val='fc_pred')"></div>
+                                            <div th:replace="fragments/targets"></div>
+                                            <div class="col-md-2">
+                                                <button id="predict_btn" class="btn btn-default">Predict</button>
                                             </div>
                                         </div>
                                         <div class="row top-buffer">
@@ -142,11 +171,47 @@
                                                 <div id="predictionchart"></div>
                                             </div>
                                         </div>
+
                                     </div>
-                                    <!--<div id="traintab" class="tab-pane fade">
-                                        <h3>Predict</h3>
-                                    </div>-->
-                                </div> <!-- end tab -->
+                                    <div id="clusterstab" class="tab-pane fade">
+                                        <div class="row top-buffer">
+                                            <div class="col-md-3">
+                                                <label for="cluster_btn">Build clusters</label>
+                                                <div>
+                                                    <button id="cluster_btn" class="btn btn-default">Create
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="instrument">Select cluster</label>
+                                                <div>
+                                                    <select class="form-control chosen" required name="cluster"
+                                                            id="cluster">
+                                                        <option value="0">Select cluster</option>
+                                                        <option value="1">Cluster 1</option>
+                                                        <option value="2">Cluster 2</option>
+                                                        <option value="3">Cluster 3</option>
+                                                        <option value="4">Cluster 4</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div class="col-md-6">
+                                                <div id="body1">
+                                                    <div id="radarchart1"></div>
+                                                </div>
+                                            </div>
+                                        <!--</div>
+                                        <div class="row top-buffer">-->
+                                            <div class="col-md-6">
+                                                <div id="body2">
+                                                    <div id="radarchart2"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end tab -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -154,12 +219,14 @@
             </div>
         </div>
     </div>
-</div>
-<th:block layout:fragment="script">
-    <script src="js/attributeweighting.js" th:src="@{/js/attributeweighting.js}"></script>
-    <script src="js/predictionchart.js" th:src="@{/js/predictionchart.js}"></script>
-    <script src="js/sankey.js" th:src="@{/js/sankey.js}"></script>
-    <script src="js/sankeychart.js" th:src="@{/js/sankeychart.js}"></script>
-</th:block>
+    <th:block layout:fragment="script">
+        <script src="js/d3.tip.js" th:src="@{/js/d3.tip.js}"></script>
+        <script src="js/attributeweighting.js" th:src="@{/js/attributeweighting.js}"></script>
+        <script src="js/predictionchart.js" th:src="@{/js/predictionchart.js}"></script>
+        <script src="js/sankey.js" th:src="@{/js/sankey.js}"></script>
+        <script src="js/sankeychart.js" th:src="@{/js/sankeychart.js}"></script>
+        <script src="js/radarchart.js" th:src="@{/js/radarchart.js}"></script>
+        <script src="js/radar.js>" th:src="@{/js/radar.js}"></script>
+    </th:block>
 </body>
 </html>

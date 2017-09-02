@@ -12,19 +12,27 @@ import java.util.stream.Collectors;
 
 /**
  * Data structure that controls the RM macro values in the RM process
+ * The Main RM process is controlled by the following parameters:
+ * A_BC_th	-1                  : ROC threshold value, -1 use optimal
+ * C_AB_th	-1                  : ROC threshold value, -1 use optimal
+ * comprehensive	true        : Include resit grades as separate attributes
+ * filtercode	11,12,13,21     : What semesters should be included
+ * input	1                   : IR_IRA (1), IR(2), IRA(3), Grades only (4)
+ * instrument	4               : Which instrument should be used for prediction
+ * mapper	3                   : How is the target attribute mapped, 1=not, 2=binary, 3=ternary, ..., 5=fiveclasses
+ * modelname instrument.model   : Instrument filename, based of off other parameters when "instrument.model"
+ * nom_num	2                   : Nominal or numerical transformation
+ * run_type	3                   : Attribute weights (1), Prediction (2), Training (3)
+ * statistic	1               : Attribute weights statistic, correlation (1), chisquare (2), information gain (3)
+ * studentids	all             : Predict for which students
+ * targets	Doorloop: Studieduur: Target attribute name
+ * type	regular                 : Prediction or training type: "regular", "roc", "multistage"
  */
 public class MacroMap {
 
     private final Process process;
     private final Map<String, String> standardMap;
     private Map<String, String> macroMap;
-    private String[] nameComponents = "targets,mapper,filtercode,instrument,nom_num,statistic".split(",");
-
-    public MacroMap() {
-        process = null;
-        standardMap = new HashMap<>();
-        macroMap = new HashMap<>();
-    }
 
     public MacroMap(Process process) {
         this.process = process;
@@ -96,6 +104,16 @@ public class MacroMap {
         return this;
     }
 
+    public MacroMap comprehensive(String value) {
+        macroMap.put("comprehensive", value);
+        return this;
+    }
+
+    public MacroMap type(String value) {
+        macroMap.put("type", value);
+        return this;
+    }
+
     public MacroMap A_BC_th(String value) {
         macroMap.put("A_BC_th", value);
         return this;
@@ -107,16 +125,6 @@ public class MacroMap {
     }
 
     public void activate() {
-        StringBuilder modelname = new StringBuilder();
-        for (String name : nameComponents) {
-            if (macroMap.containsKey(name)) {
-                modelname
-                        .append(macroMap.get(name).replaceAll("( |:|,)", "_"))
-                        .append("_");
-            }
-        }
-        modelname.delete(modelname.lastIndexOf("_"), modelname.length());
-        macroMap.put("modelname", modelname.toString());
         process.getContext().setMacros(this.toPairList());
     }
 

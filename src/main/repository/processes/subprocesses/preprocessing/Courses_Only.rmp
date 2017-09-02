@@ -35,7 +35,7 @@
         <parameter key="invert_selection" value="true"/>
         <parameter key="include_special_attributes" value="false"/>
       </operator>
-      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="68" name="Python Select Attributes (2)" width="90" x="313" y="34">
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Python Select Attributes (2)" width="90" x="313" y="34">
         <parameter key="process_location" value="Python Attribute Select"/>
         <parameter key="use_input" value="true"/>
         <parameter key="store_output" value="false"/>
@@ -47,7 +47,7 @@
         </list>
         <parameter key="fail_for_unknown_macros" value="false"/>
       </operator>
-      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="68" name="Python Select Attributes" width="90" x="447" y="187">
+      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Python Select Attributes" width="90" x="447" y="187">
         <parameter key="process_location" value="Python Attribute Select"/>
         <parameter key="use_input" value="true"/>
         <parameter key="store_output" value="false"/>

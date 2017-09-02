@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.001">
   <context>
     <input/>
     <output/>
@@ -13,7 +13,7 @@
       </macro>
     </macros>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -21,10 +21,10 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="true" class="read_excel" compatibility="7.5.003" expanded="true" height="68" name="Read Filter codes" width="90" x="55" y="105">
-        <parameter key="excel_file" value="/home/wouter/Google Drive/Master AI/Thesis/Code/Repository/data/Data Analyse.xlsx"/>
+      <operator activated="true" class="read_excel" compatibility="7.6.001" expanded="true" height="68" name="Read Filter codes" width="90" x="155" y="105">
+        <parameter key="excel_file" value="/home/wouter/Google Drive/Master AI/Thesis/Code/la-dashboard/src/main/repository/data/Data Analyse.xlsx"/>
         <parameter key="sheet_number" value="5"/>
-        <parameter key="imported_cell_range" value="A1:Z171"/>
+        <parameter key="imported_cell_range" value="A1:Z398"/>
         <parameter key="encoding" value="SYSTEM"/>
         <parameter key="first_row_as_names" value="false"/>
         <list key="annotations">
@@ -65,7 +65,7 @@
         <parameter key="datamanagement" value="double_array"/>
         <parameter key="data_management" value="auto"/>
       </operator>
-      <operator activated="true" class="python_scripting:execute_python" compatibility="7.4.000" expanded="true" height="103" name="Python Script" width="90" x="189" y="34">
+      <operator activated="true" class="python_scripting:execute_python" compatibility="7.4.000" expanded="true" height="103" name="Python Script" width="90" x="410" y="35">
         <parameter key="script" value="import pandas as pd&#10;&#10;# rm_main is a mandatory function, &#10;# the number of arguments has to be the number of input ports (can be none)&#10;def rm_main(data,meta_data):&#10;    # output can be found in Log View    &#10;    # meta_data = pd.read_excel(&quot;/home/wouter/Google Drive/Master AI/Thesis/Code/Repository/data/Data Analyse.xlsx&quot;,sheetname='RapidminerWeights')&#10;    # filtercode = '11'&#10;    # targets = 'Doorloop: Studieduur'&#10;    # your code goes here&#10;    # transform input into lists&#10;    targets = '%{targets}'&#10;    targets = targets.split(&quot;,&quot;)&#10;    filtercode = '%{filtercode}'&#10;    filtercode = filtercode.split(&quot;,&quot;)&#10;   &#10;    selected_attributes = meta_data.loc[(meta_data['Attribute'].isin(targets)) | (meta_data['Filter Code'].isin(filtercode))]['Attribute']&#10;&#10;    #for example:&#10;    filter = list(set(data.columns.values).intersection(selected_attributes))&#10;    data2 = data[filter]&#10;&#10;    # connect 2 output ports to see the results&#10;    return data2, data"/>
       </operator>
       <connect from_port="input 1" to_op="Python Script" to_port="input 1"/>

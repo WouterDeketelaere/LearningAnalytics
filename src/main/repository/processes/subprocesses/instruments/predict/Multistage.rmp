@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.000">
   <context>
     <input/>
     <output/>
@@ -9,11 +9,11 @@
       </macro>
       <macro>
         <key>filtercode</key>
-        <value>11,12,13,21</value>
+        <value>11</value>
       </macro>
     </macros>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.000" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -21,20 +21,53 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Re-set Id" width="90" x="45" y="34">
+      <operator activated="true" class="retrieve" compatibility="7.6.000" expanded="true" height="68" name="Ternary Model" width="90" x="410" y="156">
+        <parameter key="repository_entry" value="../../../../data/models/Stage1"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="7.6.000" expanded="true" height="68" name="Balanced Model" width="90" x="640" y="155">
+        <parameter key="repository_entry" value="../../../../data/models/Stage2"/>
+      </operator>
+      <operator activated="false" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="145" name="Datasets from repository" width="90" x="171" y="494">
+        <parameter key="process_location" value="../../preprocessing/Load Datasets From Repository"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="false" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="145" name="Join Datasets" width="90" x="305" y="494">
+        <parameter key="process_location" value="../../preprocessing/Join Datasets"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="filtercode" value="%{filtercode}"/>
+          <parameter key="comprehensive" value="false"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="false"/>
+      </operator>
+      <operator activated="false" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="82" name="Python Attribute Select" width="90" x="468" y="495">
+        <parameter key="process_location" value="../../preprocessing/Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="targets" value="%{targets}"/>
+          <parameter key="filtercode" value="%{filtercode}"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.6.000" expanded="true" height="82" name="Re-set Id" width="90" x="45" y="34">
         <parameter key="attribute_name" value="Stamnummer student"/>
         <parameter key="target_role" value="id"/>
         <list key="set_additional_roles">
           <parameter key="Doorloop: Studieduur" value="label"/>
         </list>
       </operator>
-      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Ternary Model" width="90" x="410" y="156">
-        <parameter key="repository_entry" value="../data/models/NN_Ternary"/>
-      </operator>
-      <operator activated="true" class="retrieve" compatibility="7.5.003" expanded="true" height="68" name="Balanced Model" width="90" x="640" y="155">
-        <parameter key="repository_entry" value="../data/models/Balanced_model"/>
-      </operator>
-      <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Target Mapper" width="90" x="161" y="34">
+      <operator activated="true" class="map" compatibility="7.6.000" expanded="true" height="82" name="Map O" width="90" x="161" y="34">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="%{targets}"/>
         <parameter key="attributes" value=""/>
@@ -54,7 +87,7 @@
         <parameter key="consider_regular_expressions" value="false"/>
         <parameter key="add_default_mapping" value="false"/>
       </operator>
-      <operator activated="true" class="nominal_to_numerical" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Numerical" width="90" x="280" y="34">
+      <operator activated="true" class="nominal_to_numerical" compatibility="7.6.000" expanded="true" height="103" name="Nominal to Numerical" width="90" x="288" y="34">
         <parameter key="return_preprocessing_model" value="false"/>
         <parameter key="create_view" value="false"/>
         <parameter key="attribute_filter_type" value="all"/>
@@ -69,17 +102,17 @@
         <parameter key="except_block_type" value="single_value"/>
         <parameter key="invert_selection" value="false"/>
         <parameter key="include_special_attributes" value="false"/>
-        <parameter key="coding_type" value="dummy coding"/>
+        <parameter key="coding_type" value="unique integers"/>
         <parameter key="use_comparison_groups" value="false"/>
         <list key="comparison_groups"/>
         <parameter key="unexpected_value_handling" value="all 0 and warning"/>
         <parameter key="use_underscore_in_name" value="false"/>
       </operator>
-      <operator activated="true" class="apply_model" compatibility="7.5.003" expanded="true" height="82" name="Apply Ternary Model" width="90" x="433" y="34">
+      <operator activated="true" class="apply_model" compatibility="7.6.000" expanded="true" height="82" name="Apply Ternary Model" width="90" x="433" y="34">
         <list key="application_parameters"/>
         <parameter key="create_view" value="false"/>
       </operator>
-      <operator activated="true" class="filter_examples" compatibility="7.5.003" expanded="true" height="103" name="Remove Late" width="90" x="565" y="34">
+      <operator activated="true" class="filter_examples" compatibility="7.6.000" expanded="true" height="103" name="Remove Late" width="90" x="565" y="34">
         <parameter key="parameter_expression" value=""/>
         <parameter key="condition_class" value="custom_filters"/>
         <parameter key="invert_filter" value="true"/>
@@ -89,7 +122,7 @@
         <parameter key="filters_logic_and" value="true"/>
         <parameter key="filters_check_metadata" value="true"/>
       </operator>
-      <operator activated="true" class="select_attributes" compatibility="7.5.003" expanded="true" height="82" name="Remove Late Attributes" width="90" x="723" y="34">
+      <operator activated="true" class="select_attributes" compatibility="7.6.000" expanded="true" height="82" name="Remove Late Attributes" width="90" x="723" y="34">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="confidence(L)"/>
         <parameter key="attributes" value=""/>
@@ -103,21 +136,11 @@
         <parameter key="invert_selection" value="true"/>
         <parameter key="include_special_attributes" value="true"/>
       </operator>
-      <operator activated="false" class="filter_examples" compatibility="7.5.003" expanded="true" height="103" name="Filter Examples" width="90" x="659" y="341">
-        <parameter key="parameter_expression" value=""/>
-        <parameter key="condition_class" value="custom_filters"/>
-        <parameter key="invert_filter" value="false"/>
-        <list key="filters_list">
-          <parameter key="filters_entry_key" value="prediction(Doorloop: Studieduur).contains.L"/>
-        </list>
-        <parameter key="filters_logic_and" value="true"/>
-        <parameter key="filters_check_metadata" value="true"/>
-      </operator>
-      <operator activated="true" class="apply_model" compatibility="7.5.003" expanded="true" height="82" name="Apply Balanced Model" width="90" x="847" y="155">
+      <operator activated="true" class="apply_model" compatibility="7.6.000" expanded="true" height="82" name="Apply Balanced Model" width="90" x="847" y="155">
         <list key="application_parameters"/>
         <parameter key="create_view" value="false"/>
       </operator>
-      <operator activated="true" class="performance_classification" compatibility="7.5.003" expanded="true" height="82" name="Second Stage Performance" width="90" x="985" y="155">
+      <operator activated="true" class="performance_classification" compatibility="7.6.000" expanded="true" height="82" name="Second Stage Performance" width="90" x="985" y="155">
         <parameter key="main_criterion" value="first"/>
         <parameter key="accuracy" value="true"/>
         <parameter key="classification_error" value="false"/>
@@ -144,10 +167,10 @@
         <parameter key="use_example_weights" value="true"/>
         <list key="class_weights"/>
       </operator>
-      <operator activated="true" class="generate_prediction" compatibility="7.5.003" expanded="true" height="82" name="Generate Prediction" width="90" x="849" y="34">
+      <operator activated="true" class="generate_prediction" compatibility="7.6.000" expanded="true" height="82" name="Generate Prediction" width="90" x="849" y="34">
         <parameter key="prediction_name" value="prediction(Doorloop: Studieduur)"/>
       </operator>
-      <operator activated="true" class="performance_classification" compatibility="7.5.003" expanded="true" height="82" name="First Stage Performance" width="90" x="983" y="34">
+      <operator activated="true" class="performance_classification" compatibility="7.6.000" expanded="true" height="82" name="First Stage Performance" width="90" x="983" y="34">
         <parameter key="main_criterion" value="first"/>
         <parameter key="accuracy" value="true"/>
         <parameter key="classification_error" value="false"/>
@@ -174,12 +197,17 @@
         <parameter key="use_example_weights" value="true"/>
         <list key="class_weights"/>
       </operator>
-      <operator activated="true" class="average" compatibility="7.5.003" expanded="true" height="103" name="Average" width="90" x="1116" y="85"/>
+      <operator activated="true" class="average" compatibility="7.6.000" expanded="true" height="103" name="Average" width="90" x="1116" y="85"/>
       <connect from_port="input 1" to_op="Re-set Id" to_port="example set input"/>
-      <connect from_op="Re-set Id" from_port="example set output" to_op="Target Mapper" to_port="example set input"/>
       <connect from_op="Ternary Model" from_port="output" to_op="Apply Ternary Model" to_port="model"/>
       <connect from_op="Balanced Model" from_port="output" to_op="Apply Balanced Model" to_port="model"/>
-      <connect from_op="Target Mapper" from_port="example set output" to_op="Nominal to Numerical" to_port="example set input"/>
+      <connect from_op="Datasets from repository" from_port="result 1" to_op="Join Datasets" to_port="input 1"/>
+      <connect from_op="Datasets from repository" from_port="result 2" to_op="Join Datasets" to_port="input 2"/>
+      <connect from_op="Datasets from repository" from_port="result 3" to_op="Join Datasets" to_port="input 3"/>
+      <connect from_op="Datasets from repository" from_port="result 4" to_op="Join Datasets" to_port="input 4"/>
+      <connect from_op="Join Datasets" from_port="result 1" to_op="Python Attribute Select" to_port="input 1"/>
+      <connect from_op="Re-set Id" from_port="example set output" to_op="Map O" to_port="example set input"/>
+      <connect from_op="Map O" from_port="example set output" to_op="Nominal to Numerical" to_port="example set input"/>
       <connect from_op="Nominal to Numerical" from_port="example set output" to_op="Apply Ternary Model" to_port="unlabelled data"/>
       <connect from_op="Apply Ternary Model" from_port="labelled data" to_op="Remove Late" to_port="example set input"/>
       <connect from_op="Remove Late" from_port="example set output" to_op="Remove Late Attributes" to_port="example set input"/>

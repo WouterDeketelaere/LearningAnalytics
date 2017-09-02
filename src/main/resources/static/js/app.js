@@ -1,14 +1,3 @@
-$.fn.enterKey = function (fnc) {
-    return this.each(function () {
-        $(this).keypress(function (ev) {
-            var keycode = (ev.keyCode ? ev.keyCode : ev.which);
-            if (keycode == '13') {
-                fnc.call(this, ev);
-            }
-        })
-    })
-}
-
 var stompClient = null;
 
 function connect() {
@@ -37,15 +26,9 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function executeProcess(url, message) {
-    var bars = document.getElementsByClassName("progress-bar");
-    bars[0].style.width = "0%";
-    stompClient.send(url, {}, JSON.stringify(message));
-}
-
 function updateProcessName(process, progress) {
     var name = document.getElementById("process-name");
-    name.innerHTML = process + " " + parseFloat(Math.round(progress)).toFixed(0) + "%"
+    name.innerHTML = process + " " + roundValue(progress) + "%"
 }
 
 function updateProgressBar(progressvalue) {
@@ -54,9 +37,72 @@ function updateProgressBar(progressvalue) {
     $("sr-only")[0];
 }
 
+function roundValue(value, exp) {
+    if (typeof exp === 'undefined' || +exp === 0)
+        return Math.round(value);
+
+    value = +value;
+    exp = +exp;
+
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+        return NaN;
+
+    // Shift
+    value = value.toString().split('e');
+    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+}
+
+function initbuttons() {
+    $($('.fc_pred')[0]).bootstrapToggle('on');
+
+    $($('.fc_attr')[0]).bootstrapToggle('on');
+
+    $($('.mapper')[0]).bootstrapToggle('on');
+}
+
+function extractFiltercodes(clazz) {
+    var codes = ['11', '12', '13', '21', '22', '23', '31', '32', '33'];
+    var filtercodes = "";
+    $(clazz).each(function (i) {
+        if (this.checked) {
+            filtercodes += codes[i] + ",";
+        }
+    });
+    return filtercodes.slice(0, -1);
+}
+
+function extractMapper() {
+    var mapper = 0;
+    $('.mapper').each(function (i) {
+        if (this.checked) {
+            mapper = i;
+        }
+    });
+    return mapper + 1;
+}
+
+
+$.fn.enterKey = function (fnc) {
+    return this.each(function () {
+        $(this).keypress(function (ev) {
+            var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+            if (keycode == '13') {
+                fnc.call(this, ev);
+            }
+        })
+    })
+};
+
 $(function () {
+    $('.chosen').chosen();
     // connect to Web Socket for process progress updates
     connect();
+    initbuttons();
+    plot_sankey("/dashboard/tracks?which=avsbc");
 
     $("#roc_form_1").on('submit', function (e) {
         e.preventDefault();
@@ -67,17 +113,21 @@ $(function () {
     });
 
     $("#predict_form").on('submit', function (e) {
-        // e.preventDefault();
+        //e.preventDefault();
     });
 
-    $("#predict_studentids").enterKey(function () {
-        var url = [];
-        var studentids = this.value;
-        var filtercode = $("#fc_slider_predict").val();
-        var mapper = $("#outcome_slider").val();
-        var instrument = $("#instrument").val();
-        url.push('/dashboard/predict', '?', 'filtercode=', filtercode, '&mapper=', mapper, "&instrument=", instrument, "&studentids=", studentids);
-        plot_prediction_chart(url.join(""));
+    $("#predict_btn").click(function () {
+        var studentids = $('#predict_studentids').val();
+        var params = {
+            filtercode: extractFiltercodes('.fc_pred'),
+            mapper: extractMapper(),
+            statistic: $('#pred_statistic').val(),
+            instrument: $("#instrument").val(),
+            comprehensive: $('#predict_comprehensive').prop("checked"),
+            studentids: studentids
+        };
+        var url = '/dashboard/predict?';
+        plot_prediction_chart(url + $.param(params));
     });
 
     $("#avsbc").click(function () {
@@ -97,11 +147,31 @@ $(function () {
     });
 
     $('#weights_btn').on('click', function (e) {
-        var statistic_type = $('#statistic').val();
-        var dataset = $('#dataset').val();
-        var filtercode = $('#fc_slider_attribute').val();
-        plot_attribute_weights("/dashboard/weights?statistic=" + statistic_type + "&filtercode=" + filtercode + "&input=" + dataset);
+        var params = {
+            statistic: $('#attr_statistic').val(),
+            input: $('#input').val(),
+            filtercode: extractFiltercodes('.fc_attr'),
+            comprehensive: $('#attr_comprehensive').prop("checked")
+        };
+        var url = "/dashboard/weights?";
+        plot_attribute_weights(url + $.param(params));
     });
-    plot_sankey("/dashboard/tracks?which=avsbc");
+    $('#cluster_btn').on('click', function (e) {
+        $.ajax({
+            url: "/dashboard/createclusters"
+        });
+    });
+    $('#cluster').on('change', function(e){
+        var params1 = {
+            type: 0
+        };
+        var params2 = {
+            type: 1
+        };
+        var url = "/dashboard/getclusters?";
+        plotRadarPlot("#radarchart1",url + $.param(params1),parseInt(this.value));
+        plotRadarPlot("#radarchart2",url + $.param(params2),parseInt(this.value));
+    });
+
 });
 

@@ -20,6 +20,7 @@ public class DashboardController {
 
     private RapidMinerAPI rapidMinerAPI;
     private List<RapidminerResult> rocResults;
+    private List<RapidminerResult> clusterResults;
     private Map<String, String> thresholds;
 
     @Autowired
@@ -31,19 +32,22 @@ public class DashboardController {
     }
 
     @RequestMapping(value = "weights")
-    public String weighAttributes(@RequestParam(value = "filtercode", required = false, defaultValue = "1")
+    public String weighAttributes(@RequestParam(value = "filtercode", required = false, defaultValue = "11")
                                           String filtercode,
                                   @RequestParam(value = "input", required = false, defaultValue = "1")
                                           String input,
                                   @RequestParam(value = "statistic", required = false, defaultValue = "1")
-                                          String statistic) {
+                                          String statistic,
+                                  @RequestParam(value = "comprehensive", required = false, defaultValue = "false")
+                                          String comprehensive) {
 
         rapidMinerAPI.getMacroMap()
                 .reset()
                 .run_type("1")
-                .filtercode(mapFiltercode(filtercode))
+                .filtercode(filtercode)
                 .input(input)
                 .statistic(statistic)
+                .comprehensive(comprehensive)
                 .activate();
 
         List<RapidminerResult> rapidminerResults = rapidMinerAPI.runProcess();
@@ -57,22 +61,28 @@ public class DashboardController {
                                   String mapper,
                           @RequestParam(value = "statistic", required = false, defaultValue = "1")
                                   String statistic,
-                          @RequestParam(value = "filtercode", required = false, defaultValue = "1")
+                          @RequestParam(value = "filtercode", required = false, defaultValue = "11")
                                   String filtercode,
                           @RequestParam(value = "studentids", required = false, defaultValue = "all")
-                                  String studentids) {
+                                  String studentids,
+                          @RequestParam(value = "comprehensive", required = false, defaultValue = "false")
+                                  String comprehensive,
+                          @RequestParam(value = "type", required = false, defaultValue = "regular")
+                                  String type) {
 
         rapidMinerAPI.getMacroMap()
                 .reset()
                 .run_type("2")
                 .targets("Doorloop: Studieduur")
-                .filtercode(mapFiltercode(filtercode))
+                .filtercode(filtercode)
                 .input("1")
                 .mapper(mapper)
                 .instrument(instrument)
                 .statistic(statistic)
                 .nom_num("2")
                 .studentids(studentids)
+                .comprehensive(comprehensive)
+                .type(type)
                 .activate();
 
         List<RapidminerResult> rapidminerResults = rapidMinerAPI.runProcess();
@@ -91,9 +101,11 @@ public class DashboardController {
         rapidMinerAPI.getMacroMap()
                 .reset()
                 .run_type("2")
+                .filtercode(mapFiltercode("9"))
                 .input("1")
-                .instrument("7")
+                .type("roc")
                 .studentids(studentids)
+                .comprehensive("true")
                 .A_BC_th(thresholds.get("AvsBC"))
                 .C_AB_th(thresholds.get("CvsAB"))
                 .activate();
@@ -101,6 +113,21 @@ public class DashboardController {
         this.rocResults = rapidMinerAPI.runProcess();
         return rocResults.get(0).toJSON();
     }
+
+    @RequestMapping("createclusters")
+    public void createClusters() {
+
+        rapidMinerAPI.setProcessName("ClusterAnalysis");
+        this.clusterResults = rapidMinerAPI.runProcess();
+        rapidMinerAPI.setProcessName("Main");
+    }
+
+    @RequestMapping("getclusters")
+    public String getCluster(@RequestParam(value="type", required = false,defaultValue = "0") Integer type) {
+
+        return clusterResults.get(type).toJSON();
+    }
+
 
 
     @RequestMapping(value = "roc")

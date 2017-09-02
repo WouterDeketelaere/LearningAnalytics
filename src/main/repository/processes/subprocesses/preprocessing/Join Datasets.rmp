@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.001">
   <context>
     <input/>
     <output/>
-    <macros/>
+    <macros>
+      <macro>
+        <key>filtercode</key>
+        <value>11,13</value>
+      </macro>
+      <macro>
+        <key>comprehensive</key>
+        <value>true</value>
+      </macro>
+    </macros>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -12,9 +21,11 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply" width="90" x="100" y="55"/>
-      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join Progr - Jan" width="90" x="246" y="34">
-        <parameter key="remove_double_attributes" value="true"/>
+      <operator activated="true" class="multiply" compatibility="7.6.001" expanded="true" height="103" name="September Grades" width="90" x="222" y="434"/>
+      <operator activated="true" class="multiply" compatibility="7.6.001" expanded="true" height="103" name="June Grades" width="90" x="220" y="322"/>
+      <operator activated="true" class="multiply" compatibility="7.6.001" expanded="true" height="103" name="January Grades" width="90" x="220" y="214"/>
+      <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Join Progr - Jan" width="90" x="346" y="34">
+        <parameter key="remove_double_attributes" value="false"/>
         <parameter key="join_type" value="inner"/>
         <parameter key="use_id_attribute_as_key" value="true"/>
         <list key="key_attributes">
@@ -22,27 +33,189 @@
         </list>
         <parameter key="keep_both_join_attributes" value="false"/>
       </operator>
-      <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply (2)" width="90" x="103" y="167"/>
-      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join in June grades" width="90" x="380" y="85">
-        <parameter key="remove_double_attributes" value="true"/>
-        <parameter key="join_type" value="inner"/>
-        <parameter key="use_id_attribute_as_key" value="true"/>
-        <list key="key_attributes">
-          <parameter key="Stamnummer student" value="Stamnummer student"/>
-        </list>
-        <parameter key="keep_both_join_attributes" value="false"/>
+      <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Include X2 (2)" width="90" x="610" y="34">
+        <parameter key="condition_type" value="expression"/>
+        <parameter key="expression" value="finds(%{filtercode},&quot;(\\d{1}2)&quot;)"/>
+        <parameter key="io_object" value="ANOVAMatrix"/>
+        <parameter key="return_inner_output" value="true"/>
+        <process expanded="true">
+          <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Comprehensive or not (3)" width="90" x="246" y="34">
+            <parameter key="condition_type" value="expression"/>
+            <parameter key="expression" value="equals(%{comprehensive},&quot;true&quot;)"/>
+            <parameter key="io_object" value="ANOVAMatrix"/>
+            <parameter key="return_inner_output" value="true"/>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Comprehensive Join (3)" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="false"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove double attributes is false</description>
+              </operator>
+              <operator activated="true" class="rename_by_replacing" compatibility="7.6.001" expanded="true" height="82" name="Rename by Replacing (2)" width="90" x="357" y="34">
+                <parameter key="attribute_filter_type" value="all"/>
+                <parameter key="attribute" value=""/>
+                <parameter key="attributes" value=""/>
+                <parameter key="use_except_expression" value="false"/>
+                <parameter key="value_type" value="attribute_value"/>
+                <parameter key="use_value_type_exception" value="false"/>
+                <parameter key="except_value_type" value="time"/>
+                <parameter key="block_type" value="attribute_block"/>
+                <parameter key="use_block_type_exception" value="false"/>
+                <parameter key="except_block_type" value="value_matrix_row_start"/>
+                <parameter key="invert_selection" value="false"/>
+                <parameter key="include_special_attributes" value="false"/>
+                <parameter key="replace_what" value="from_ES2"/>
+                <parameter key="replace_by" value="june"/>
+              </operator>
+              <connect from_port="input 1" to_op="Comprehensive Join (3)" to_port="left"/>
+              <connect from_port="input 2" to_op="Comprehensive Join (3)" to_port="right"/>
+              <connect from_op="Comprehensive Join (3)" from_port="join" to_op="Rename by Replacing (2)" to_port="example set input"/>
+              <connect from_op="Rename by Replacing (2)" from_port="example set output" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Update Join (3)" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="true"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove doube attributes is true&lt;br&gt;In case of doubles left join input chosen in favor of right join input</description>
+              </operator>
+              <connect from_port="input 1" to_op="Update Join (3)" to_port="right"/>
+              <connect from_port="input 2" to_op="Update Join (3)" to_port="left"/>
+              <connect from_op="Update Join (3)" from_port="join" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+          </operator>
+          <connect from_port="input 1" to_op="Comprehensive or not (3)" to_port="input 1"/>
+          <connect from_port="input 2" to_op="Comprehensive or not (3)" to_port="input 2"/>
+          <connect from_op="Comprehensive or not (3)" from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
       </operator>
-      <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply (3)" width="90" x="100" y="287"/>
-      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join in September (2)" width="90" x="514" y="136">
-        <parameter key="remove_double_attributes" value="true"/>
-        <parameter key="join_type" value="inner"/>
-        <parameter key="use_id_attribute_as_key" value="true"/>
-        <list key="key_attributes">
-          <parameter key="Stamnummer student" value="Stamnummer student"/>
-        </list>
-        <parameter key="keep_both_join_attributes" value="false"/>
+      <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Include X3 (2)" width="90" x="773" y="34">
+        <parameter key="condition_type" value="expression"/>
+        <parameter key="expression" value="finds(%{filtercode},&quot;(\\d{1}3)&quot;)"/>
+        <parameter key="io_object" value="ANOVAMatrix"/>
+        <parameter key="return_inner_output" value="true"/>
+        <process expanded="true">
+          <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Comprehensive or not (4)" width="90" x="246" y="34">
+            <parameter key="condition_type" value="expression"/>
+            <parameter key="expression" value="equals(%{comprehensive},&quot;true&quot;)"/>
+            <parameter key="io_object" value="ANOVAMatrix"/>
+            <parameter key="return_inner_output" value="true"/>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Comprehensive Join (4)" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="false"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove double attributes is false</description>
+              </operator>
+              <operator activated="true" class="rename_by_replacing" compatibility="7.6.001" expanded="true" height="82" name="Rename by Replacing (3)" width="90" x="339" y="34">
+                <parameter key="attribute_filter_type" value="all"/>
+                <parameter key="attribute" value=""/>
+                <parameter key="attributes" value=""/>
+                <parameter key="use_except_expression" value="false"/>
+                <parameter key="value_type" value="attribute_value"/>
+                <parameter key="use_value_type_exception" value="false"/>
+                <parameter key="except_value_type" value="time"/>
+                <parameter key="block_type" value="attribute_block"/>
+                <parameter key="use_block_type_exception" value="false"/>
+                <parameter key="except_block_type" value="value_matrix_row_start"/>
+                <parameter key="invert_selection" value="false"/>
+                <parameter key="include_special_attributes" value="false"/>
+                <parameter key="replace_what" value="from_ES2"/>
+                <parameter key="replace_by" value="sep"/>
+              </operator>
+              <connect from_port="input 1" to_op="Comprehensive Join (4)" to_port="left"/>
+              <connect from_port="input 2" to_op="Comprehensive Join (4)" to_port="right"/>
+              <connect from_op="Comprehensive Join (4)" from_port="join" to_op="Rename by Replacing (3)" to_port="example set input"/>
+              <connect from_op="Rename by Replacing (3)" from_port="example set output" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Update Join (4)" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="true"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove doube attributes is true&lt;br&gt;In case of doubles left join input chosen in favor of right join input</description>
+              </operator>
+              <connect from_port="input 1" to_op="Update Join (4)" to_port="right"/>
+              <connect from_port="input 2" to_op="Update Join (4)" to_port="left"/>
+              <connect from_op="Update Join (4)" from_port="join" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+          </operator>
+          <connect from_port="input 1" to_op="Comprehensive or not (4)" to_port="input 1"/>
+          <connect from_port="input 2" to_op="Comprehensive or not (4)" to_port="input 2"/>
+          <connect from_op="Comprehensive or not (4)" from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
       </operator>
-      <operator activated="true" class="filter_examples" compatibility="7.5.003" expanded="true" height="103" name="Split IR - IRA" width="90" x="702" y="34">
+      <operator activated="true" class="filter_examples" compatibility="7.6.001" expanded="true" height="103" name="Split IR - IRA" width="90" x="894" y="34">
         <parameter key="parameter_expression" value=""/>
         <parameter key="condition_class" value="custom_filters"/>
         <parameter key="invert_filter" value="false"/>
@@ -52,42 +225,206 @@
         <parameter key="filters_logic_and" value="true"/>
         <parameter key="filters_check_metadata" value="true"/>
       </operator>
-      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join Jan - June" width="90" x="507" y="232">
-        <parameter key="remove_double_attributes" value="true"/>
-        <parameter key="join_type" value="inner"/>
-        <parameter key="use_id_attribute_as_key" value="true"/>
-        <list key="key_attributes">
-          <parameter key="Stamnummer student" value="Stamnummer student"/>
-        </list>
-        <parameter key="keep_both_join_attributes" value="false"/>
+      <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Include X2" width="90" x="613" y="216">
+        <parameter key="condition_type" value="expression"/>
+        <parameter key="expression" value="finds(%{filtercode},&quot;(\\d{1}2)&quot;)"/>
+        <parameter key="io_object" value="ANOVAMatrix"/>
+        <parameter key="return_inner_output" value="true"/>
+        <process expanded="true">
+          <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Comprehensive or not" width="90" x="201" y="34">
+            <parameter key="condition_type" value="expression"/>
+            <parameter key="expression" value="equals(%{comprehensive},&quot;true&quot;)"/>
+            <parameter key="io_object" value="ANOVAMatrix"/>
+            <parameter key="return_inner_output" value="true"/>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Comprehensive Join" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="false"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove double attributes is false</description>
+              </operator>
+              <operator activated="true" class="rename_by_replacing" compatibility="7.6.001" expanded="true" height="82" name="Rename by Replacing" width="90" x="353" y="34">
+                <parameter key="attribute_filter_type" value="all"/>
+                <parameter key="attribute" value=""/>
+                <parameter key="attributes" value=""/>
+                <parameter key="use_except_expression" value="false"/>
+                <parameter key="value_type" value="attribute_value"/>
+                <parameter key="use_value_type_exception" value="false"/>
+                <parameter key="except_value_type" value="time"/>
+                <parameter key="block_type" value="attribute_block"/>
+                <parameter key="use_block_type_exception" value="false"/>
+                <parameter key="except_block_type" value="value_matrix_row_start"/>
+                <parameter key="invert_selection" value="false"/>
+                <parameter key="include_special_attributes" value="false"/>
+                <parameter key="replace_what" value="from_ES2"/>
+                <parameter key="replace_by" value="june"/>
+              </operator>
+              <connect from_port="input 1" to_op="Comprehensive Join" to_port="left"/>
+              <connect from_port="input 2" to_op="Comprehensive Join" to_port="right"/>
+              <connect from_op="Comprehensive Join" from_port="join" to_op="Rename by Replacing" to_port="example set input"/>
+              <connect from_op="Rename by Replacing" from_port="example set output" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Update Join" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="true"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove doube attributes is true&lt;br&gt;In case of doubles left join input chosen in favor of right join input</description>
+              </operator>
+              <connect from_port="input 1" to_op="Update Join" to_port="right"/>
+              <connect from_port="input 2" to_op="Update Join" to_port="left"/>
+              <connect from_op="Update Join" from_port="join" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+          </operator>
+          <connect from_port="input 1" to_op="Comprehensive or not" to_port="input 1"/>
+          <connect from_port="input 2" to_op="Comprehensive or not" to_port="input 2"/>
+          <connect from_op="Comprehensive or not" from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
       </operator>
-      <operator activated="true" class="join" compatibility="7.5.003" expanded="true" height="82" name="Join in September" width="90" x="715" y="289">
-        <parameter key="remove_double_attributes" value="true"/>
-        <parameter key="join_type" value="inner"/>
-        <parameter key="use_id_attribute_as_key" value="true"/>
-        <list key="key_attributes">
-          <parameter key="Stamnummer student" value="Stamnummer student"/>
-        </list>
-        <parameter key="keep_both_join_attributes" value="false"/>
+      <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Include X3" width="90" x="846" y="315">
+        <parameter key="condition_type" value="expression"/>
+        <parameter key="expression" value="finds(%{filtercode},&quot;(\\d{1}3)&quot;)"/>
+        <parameter key="io_object" value="ANOVAMatrix"/>
+        <parameter key="return_inner_output" value="true"/>
+        <process expanded="true">
+          <operator activated="true" class="branch" compatibility="7.6.001" expanded="true" height="124" name="Comprehensive or not (2)" width="90" x="246" y="34">
+            <parameter key="condition_type" value="expression"/>
+            <parameter key="expression" value="equals(%{comprehensive},&quot;true&quot;)"/>
+            <parameter key="io_object" value="ANOVAMatrix"/>
+            <parameter key="return_inner_output" value="true"/>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Comprehensive Join (2)" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="false"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove double attributes is false</description>
+              </operator>
+              <operator activated="true" class="rename_by_replacing" compatibility="7.6.001" expanded="true" height="82" name="Rename by Replacing (4)" width="90" x="352" y="34">
+                <parameter key="attribute_filter_type" value="all"/>
+                <parameter key="attribute" value=""/>
+                <parameter key="attributes" value=""/>
+                <parameter key="use_except_expression" value="false"/>
+                <parameter key="value_type" value="attribute_value"/>
+                <parameter key="use_value_type_exception" value="false"/>
+                <parameter key="except_value_type" value="time"/>
+                <parameter key="block_type" value="attribute_block"/>
+                <parameter key="use_block_type_exception" value="false"/>
+                <parameter key="except_block_type" value="value_matrix_row_start"/>
+                <parameter key="invert_selection" value="false"/>
+                <parameter key="include_special_attributes" value="false"/>
+                <parameter key="replace_what" value="from_ES2"/>
+                <parameter key="replace_by" value="sep"/>
+              </operator>
+              <connect from_port="input 1" to_op="Comprehensive Join (2)" to_port="left"/>
+              <connect from_port="input 2" to_op="Comprehensive Join (2)" to_port="right"/>
+              <connect from_op="Comprehensive Join (2)" from_port="join" to_op="Rename by Replacing (4)" to_port="example set input"/>
+              <connect from_op="Rename by Replacing (4)" from_port="example set output" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="join" compatibility="7.6.001" expanded="true" height="82" name="Update Join (2)" width="90" x="179" y="34">
+                <parameter key="remove_double_attributes" value="true"/>
+                <parameter key="join_type" value="inner"/>
+                <parameter key="use_id_attribute_as_key" value="true"/>
+                <list key="key_attributes">
+                  <parameter key="Stamnummer student" value="Stamnummer student"/>
+                </list>
+                <parameter key="keep_both_join_attributes" value="false"/>
+                <description align="center" color="transparent" colored="false" width="126">Remove doube attributes is true&lt;br&gt;In case of doubles left join input chosen in favor of right join input</description>
+              </operator>
+              <connect from_port="input 1" to_op="Update Join (2)" to_port="right"/>
+              <connect from_port="input 2" to_op="Update Join (2)" to_port="left"/>
+              <connect from_op="Update Join (2)" from_port="join" to_port="input 1"/>
+              <portSpacing port="source_condition" spacing="0"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="source_input 3" spacing="0"/>
+              <portSpacing port="sink_input 1" spacing="0"/>
+              <portSpacing port="sink_input 2" spacing="0"/>
+            </process>
+          </operator>
+          <connect from_port="input 1" to_op="Comprehensive or not (2)" to_port="input 1"/>
+          <connect from_port="input 2" to_op="Comprehensive or not (2)" to_port="input 2"/>
+          <connect from_op="Comprehensive or not (2)" from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
+        <process expanded="true">
+          <connect from_port="input 1" to_port="input 1"/>
+          <portSpacing port="source_condition" spacing="0"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="source_input 2" spacing="0"/>
+          <portSpacing port="source_input 3" spacing="0"/>
+          <portSpacing port="sink_input 1" spacing="0"/>
+          <portSpacing port="sink_input 2" spacing="0"/>
+        </process>
       </operator>
       <connect from_port="input 1" to_op="Join Progr - Jan" to_port="left"/>
-      <connect from_port="input 2" to_op="Multiply" to_port="input"/>
-      <connect from_port="input 3" to_op="Multiply (2)" to_port="input"/>
-      <connect from_port="input 4" to_op="Multiply (3)" to_port="input"/>
-      <connect from_op="Multiply" from_port="output 1" to_op="Join Progr - Jan" to_port="right"/>
-      <connect from_op="Multiply" from_port="output 2" to_op="Join Jan - June" to_port="left"/>
-      <connect from_op="Join Progr - Jan" from_port="join" to_op="Join in June grades" to_port="left"/>
-      <connect from_op="Multiply (2)" from_port="output 1" to_op="Join in June grades" to_port="right"/>
-      <connect from_op="Multiply (2)" from_port="output 2" to_op="Join Jan - June" to_port="right"/>
-      <connect from_op="Join in June grades" from_port="join" to_op="Join in September (2)" to_port="left"/>
-      <connect from_op="Multiply (3)" from_port="output 1" to_op="Join in September (2)" to_port="right"/>
-      <connect from_op="Multiply (3)" from_port="output 2" to_op="Join in September" to_port="right"/>
-      <connect from_op="Join in September (2)" from_port="join" to_op="Split IR - IRA" to_port="example set input"/>
+      <connect from_port="input 2" to_op="January Grades" to_port="input"/>
+      <connect from_port="input 3" to_op="June Grades" to_port="input"/>
+      <connect from_port="input 4" to_op="September Grades" to_port="input"/>
+      <connect from_op="September Grades" from_port="output 1" to_op="Include X3 (2)" to_port="input 2"/>
+      <connect from_op="September Grades" from_port="output 2" to_op="Include X3" to_port="input 2"/>
+      <connect from_op="June Grades" from_port="output 1" to_op="Include X2 (2)" to_port="input 2"/>
+      <connect from_op="June Grades" from_port="output 2" to_op="Include X2" to_port="input 2"/>
+      <connect from_op="January Grades" from_port="output 1" to_op="Join Progr - Jan" to_port="right"/>
+      <connect from_op="January Grades" from_port="output 2" to_op="Include X2" to_port="input 1"/>
+      <connect from_op="Join Progr - Jan" from_port="join" to_op="Include X2 (2)" to_port="input 1"/>
+      <connect from_op="Include X2 (2)" from_port="input 1" to_op="Include X3 (2)" to_port="input 1"/>
+      <connect from_op="Include X3 (2)" from_port="input 1" to_op="Split IR - IRA" to_port="example set input"/>
       <connect from_op="Split IR - IRA" from_port="example set output" to_port="result 2"/>
       <connect from_op="Split IR - IRA" from_port="original" to_port="result 1"/>
       <connect from_op="Split IR - IRA" from_port="unmatched example set" to_port="result 3"/>
-      <connect from_op="Join Jan - June" from_port="join" to_op="Join in September" to_port="left"/>
-      <connect from_op="Join in September" from_port="join" to_port="result 4"/>
+      <connect from_op="Include X2" from_port="input 1" to_op="Include X3" to_port="input 1"/>
+      <connect from_op="Include X3" from_port="input 1" to_port="result 4"/>
       <portSpacing port="source_input 1" spacing="0"/>
       <portSpacing port="source_input 2" spacing="0"/>
       <portSpacing port="source_input 3" spacing="0"/>

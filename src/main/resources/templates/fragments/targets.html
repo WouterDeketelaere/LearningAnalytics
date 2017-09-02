@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+
+<body>
+<!-- Targets component -->
+<div class="col-md-4">
+    <label>Targets</label>
+    <div>
+        <input th:classappend="mapper" data-size="mini" type="checkbox" id="targets_all"
+               data-toggle="toggle"
+               data-on="All"
+               data-off="All"
+               data-onstyle="success" data-offstyle="danger"
+               data-width="10" data-height="10">
+        <input th:classappend="mapper" data-size="mini" type="checkbox" id="targets_binary"
+               data-toggle="toggle"
+               data-on="Binary"
+               data-off="Binary"
+               data-onstyle="success" data-offstyle="danger"
+               data-width="20" data-height="10">
+        <input th:classappend="mapper" data-size="mini" type="checkbox" id="targets_ternary"
+               data-toggle="toggle"
+               data-on="Ternary"
+               data-off="Ternary"
+               data-onstyle="success" data-offstyle="danger"
+               data-width="25" data-height="10">
+        <input th:classappend="mapper" data-size="mini" type="checkbox" id="targets_four"
+               data-toggle="toggle"
+               data-on="Quaternary"
+               data-off="Quaternary"
+               data-onstyle="success" data-offstyle="danger"
+               data-width="35" data-height="10">
+        <input th:classappend="mapper" data-size="mini" type="checkbox" id="targets_five"
+               data-toggle="toggle"
+               data-on="Quinary"
+               data-off="Quinary"
+               data-onstyle="success" data-offstyle="danger"
+               data-width="25" data-height="10">
+    </div>
+</div>
+</body>
+</html>

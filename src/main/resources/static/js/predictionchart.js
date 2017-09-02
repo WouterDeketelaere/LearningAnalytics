@@ -1,18 +1,3 @@
-//var slider_predict = new Slider("#fc_slider_predict", {
-$("#fc_slider_predict").slider({
-    ticks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    ticks_labels: ["11", "12", "13", "21", "22", "23", "31", "32", "33"],
-    ticks_snap_bounds: 60,
-    value: 1
-});
-
-$("#outcome_slider").slider({
-    ticks: [1, 2, 3, 4, 5],
-    ticks_labels: ["All", "Two", "Three", "Four", "Five"],
-    ticks_snap_bounds: 60,
-    value: 1
-});
-
 function plot_prediction_chart(url) {
     // set the dimensions and margins of the graph
     var $container = $('#predictionchart'), width = $container.width();
@@ -36,6 +21,13 @@ function plot_prediction_chart(url) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    var tool_tip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-8, 0])
+        .html(function (d) {
+            return "Probability: " + roundValue(d.Probability,3);
+        });
+    svg.call(tool_tip);
 
     d3.json(url, function (error, jsonData) {
         if (error) throw error;
@@ -45,10 +37,10 @@ function plot_prediction_chart(url) {
 
         // Scale the range of the data in the domains
         x_pr.domain(data.map(function (d) {
-            return d.Attribute;
+            return d.Outcome;
         }));
         y_pr.domain([0, d3.max(data, function (d) {
-            return d.Weight;
+            return d.Probability;
         })]);
 
         // append the rectangles for the bar chart
@@ -57,15 +49,17 @@ function plot_prediction_chart(url) {
             .enter().append("rect")
             .attr("class", "bar")
             .attr("x", function (d) {
-                return x_pr(d.Attribute);
+                return x_pr(d.Outcome);
             })
             .attr("width", x_pr.bandwidth())
             .attr("y", function (d) {
-                return y_pr(d.Weight);
+                return y_pr(d.Probability);
             })
             .attr("height", function (d) {
-                return height - y_pr(d.Weight);
-            });
+                return height - y_pr(d.Probability);
+            })
+            .on('mouseover', tool_tip.show)
+            .on('mouseout', tool_tip.hide);
 
         // add the x Axis
         svg.append("g")
@@ -102,12 +96,12 @@ function formatprediction(jsonData) {
         values.pop();
         for (var j = 0; j < keys.length; j++) {
             var confidence = keys[j];
-            var parts = confidence.match(re)
-            var type = parts[1]
+            var parts = confidence.match(re);
+            var type = parts[1];
             var outcome = parts[3];
             var obj = {};
-            obj['Attribute'] = outcome;
-            obj['Weight'] = +values[j];
+            obj['Outcome'] = outcome;
+            obj['Probability'] = +values[j];
             data.push(obj);
         }
     }

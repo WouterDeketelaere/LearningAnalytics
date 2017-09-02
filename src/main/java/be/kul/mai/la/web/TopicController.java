@@ -26,6 +26,7 @@ public class TopicController {
             model.addAttribute("mechanisms", informationService.getAttributeWeightings());
             model.addAttribute("instruments", informationService.getInstruments());
             model.addAttribute("datasets", informationService.getDatasets());
+            model.addAttribute("studentids", informationService.getStudentIds());
         }
         return topic.toLowerCase();
     }

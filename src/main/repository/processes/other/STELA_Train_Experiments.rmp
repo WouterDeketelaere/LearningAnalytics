@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.000">
   <context>
     <input/>
     <output/>
@@ -9,11 +9,15 @@
       </macro>
       <macro>
         <key>filtercode</key>
-        <value>11</value>
+        <value>11,13,21</value>
+      </macro>
+      <macro>
+        <key>comprehensive</key>
+        <value>true</value>
       </macro>
     </macros>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.000" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -21,7 +25,7 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="false" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="68" name="Join datasets" width="90" x="112" y="437">
+      <operator activated="false" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="68" name="Join datasets" width="90" x="112" y="437">
         <parameter key="process_location" value="subprocesses/preprocessing/Join Datasets"/>
         <parameter key="use_input" value="true"/>
         <parameter key="store_output" value="false"/>
@@ -30,26 +34,7 @@
         <list key="macros"/>
         <parameter key="fail_for_unknown_macros" value="true"/>
       </operator>
-      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="124" name="Load Datasets" width="90" x="45" y="34">
-        <parameter key="process_location" value="subprocesses/preprocessing/Load Datasets From Repository"/>
-        <parameter key="use_input" value="true"/>
-        <parameter key="store_output" value="false"/>
-        <parameter key="propagate_metadata_recursively" value="true"/>
-        <parameter key="cache_process" value="true"/>
-        <list key="macros"/>
-        <parameter key="fail_for_unknown_macros" value="true"/>
-      </operator>
-      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="124" name="Join Sets" width="90" x="179" y="34">
-        <parameter key="process_location" value="subprocesses/preprocessing/Join Datasets"/>
-        <parameter key="use_input" value="true"/>
-        <parameter key="store_output" value="false"/>
-        <parameter key="propagate_metadata_recursively" value="true"/>
-        <parameter key="cache_process" value="true"/>
-        <list key="macros"/>
-        <parameter key="fail_for_unknown_macros" value="true"/>
-        <description align="left" color="transparent" colored="false" width="126">Output 1: all datasets&lt;br&gt;Output 2: IR&lt;br&gt;Output 3 IRA&lt;br&gt;Output 4: Only grades</description>
-      </operator>
-      <operator activated="false" class="map" compatibility="7.5.003" expanded="true" height="82" name="Map: None - Dropout (2)" width="90" x="313" y="442">
+      <operator activated="false" class="map" compatibility="7.6.000" expanded="true" height="82" name="Map: None - Dropout (2)" width="90" x="313" y="442">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Doorloop: Studieduur"/>
         <parameter key="attributes" value=""/>
@@ -74,57 +59,13 @@
         <parameter key="add_default_mapping" value="false"/>
         <parameter key="default_value" value="Late"/>
       </operator>
-      <operator activated="false" class="weight_by_chi_squared_statistic" compatibility="7.5.003" expanded="true" height="82" name="Weight by Chi Squared Statistic" width="90" x="447" y="442">
+      <operator activated="false" class="weight_by_chi_squared_statistic" compatibility="7.6.000" expanded="true" height="82" name="Weight by Chi Squared Statistic" width="90" x="447" y="442">
         <parameter key="normalize_weights" value="false"/>
         <parameter key="sort_weights" value="true"/>
         <parameter key="sort_direction" value="descending"/>
         <parameter key="number_of_bins" value="10"/>
       </operator>
-      <operator activated="true" class="productivity:execute_process" compatibility="7.5.003" expanded="true" height="82" name="Python Select Attributes" width="90" x="313" y="34">
-        <parameter key="process_location" value="subprocesses/preprocessing/Python Attribute Select"/>
-        <parameter key="use_input" value="true"/>
-        <parameter key="store_output" value="false"/>
-        <parameter key="propagate_metadata_recursively" value="true"/>
-        <parameter key="cache_process" value="true"/>
-        <list key="macros">
-          <parameter key="targets" value="%{targets}"/>
-          <parameter key="filtercode" value="%{filtercode}"/>
-        </list>
-        <parameter key="fail_for_unknown_macros" value="false"/>
-      </operator>
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set Role" width="90" x="447" y="34">
-        <parameter key="attribute_name" value="%{targets}"/>
-        <parameter key="target_role" value="label"/>
-        <list key="set_additional_roles">
-          <parameter key="Stamnummer student" value="id"/>
-        </list>
-      </operator>
-      <operator activated="false" class="map" compatibility="7.5.003" expanded="true" height="82" name="Ternary Map" width="90" x="581" y="34">
-        <parameter key="attribute_filter_type" value="single"/>
-        <parameter key="attribute" value="Doorloop: Studieduur"/>
-        <parameter key="attributes" value=""/>
-        <parameter key="use_except_expression" value="false"/>
-        <parameter key="value_type" value="attribute_value"/>
-        <parameter key="use_value_type_exception" value="false"/>
-        <parameter key="except_value_type" value="time"/>
-        <parameter key="block_type" value="attribute_block"/>
-        <parameter key="use_block_type_exception" value="false"/>
-        <parameter key="except_block_type" value="value_matrix_row_start"/>
-        <parameter key="invert_selection" value="false"/>
-        <parameter key="include_special_attributes" value="true"/>
-        <list key="value_mappings">
-          <parameter key="D" value="D"/>
-          <parameter key="-1" value="O"/>
-          <parameter key="0" value="O"/>
-          <parameter key="1" value="L"/>
-          <parameter key="2" value="L"/>
-          <parameter key="B" value="L"/>
-        </list>
-        <parameter key="consider_regular_expressions" value="false"/>
-        <parameter key="add_default_mapping" value="false"/>
-        <parameter key="default_value" value="Late"/>
-      </operator>
-      <operator activated="false" class="map" compatibility="7.5.003" expanded="true" height="82" name="Binary Map" width="90" x="581" y="442">
+      <operator activated="false" class="map" compatibility="7.6.000" expanded="true" height="82" name="Binary Map" width="90" x="581" y="442">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Doorloop: Studieduur"/>
         <parameter key="attributes" value=""/>
@@ -149,7 +90,72 @@
         <parameter key="add_default_mapping" value="false"/>
         <parameter key="default_value" value="Late"/>
       </operator>
-      <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Fiveclass Map" width="90" x="581" y="187">
+      <operator activated="true" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="124" name="Execute Load Datasets From Repository" width="90" x="45" y="34">
+        <parameter key="process_location" value="../subprocesses/preprocessing/Load Datasets From Repository"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros"/>
+        <parameter key="fail_for_unknown_macros" value="true"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="124" name="Execute Join Datasets" width="90" x="173" y="34">
+        <parameter key="process_location" value="../subprocesses/preprocessing/Join Datasets"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="filtercode" value="%{filtercode}"/>
+          <parameter key="comprehensive" value="%{comprehensive}"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="false"/>
+      </operator>
+      <operator activated="true" class="productivity:execute_process" compatibility="7.6.000" expanded="true" height="82" name="Execute Python Attribute Select" width="90" x="305" y="34">
+        <parameter key="process_location" value="../subprocesses/preprocessing/Python Attribute Select"/>
+        <parameter key="use_input" value="true"/>
+        <parameter key="store_output" value="false"/>
+        <parameter key="propagate_metadata_recursively" value="true"/>
+        <parameter key="cache_process" value="true"/>
+        <list key="macros">
+          <parameter key="targets" value="%{targets}"/>
+          <parameter key="filtercode" value="%{filtercode}"/>
+        </list>
+        <parameter key="fail_for_unknown_macros" value="false"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.6.000" expanded="true" height="82" name="Set Role" width="90" x="447" y="34">
+        <parameter key="attribute_name" value="%{targets}"/>
+        <parameter key="target_role" value="label"/>
+        <list key="set_additional_roles">
+          <parameter key="Stamnummer student" value="id"/>
+        </list>
+      </operator>
+      <operator activated="true" class="map" compatibility="7.6.000" expanded="true" height="82" name="Ternary Map" width="90" x="581" y="34">
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="Doorloop: Studieduur"/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="true"/>
+        <list key="value_mappings">
+          <parameter key="D" value="D"/>
+          <parameter key="-1" value="O"/>
+          <parameter key="0" value="O"/>
+          <parameter key="1" value="L"/>
+          <parameter key="2" value="L"/>
+          <parameter key="B" value="L"/>
+        </list>
+        <parameter key="consider_regular_expressions" value="false"/>
+        <parameter key="add_default_mapping" value="false"/>
+        <parameter key="default_value" value="Late"/>
+      </operator>
+      <operator activated="false" class="map" compatibility="7.6.000" expanded="true" height="82" name="Fiveclass Map" width="90" x="581" y="187">
         <parameter key="attribute_filter_type" value="single"/>
         <parameter key="attribute" value="Doorloop: Studieduur"/>
         <parameter key="attributes" value=""/>
@@ -170,7 +176,7 @@
         <parameter key="add_default_mapping" value="false"/>
         <parameter key="default_value" value="Late"/>
       </operator>
-      <operator activated="true" class="nominal_to_numerical" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Numerical" width="90" x="715" y="34">
+      <operator activated="true" class="nominal_to_numerical" compatibility="7.6.000" expanded="true" height="103" name="Nominal to Numerical" width="90" x="715" y="34">
         <parameter key="return_preprocessing_model" value="false"/>
         <parameter key="create_view" value="false"/>
         <parameter key="attribute_filter_type" value="all"/>
@@ -191,13 +197,13 @@
         <parameter key="unexpected_value_handling" value="all 0 and warning"/>
         <parameter key="use_underscore_in_name" value="false"/>
       </operator>
-      <operator activated="true" class="weight_by_correlation" compatibility="7.5.003" expanded="true" height="82" name="Weight by Correlation" width="90" x="849" y="34">
+      <operator activated="true" class="weight_by_correlation" compatibility="7.6.000" expanded="true" height="82" name="Weight by Correlation" width="90" x="849" y="34">
         <parameter key="normalize_weights" value="false"/>
         <parameter key="sort_weights" value="true"/>
         <parameter key="sort_direction" value="descending"/>
         <parameter key="squared_correlation" value="false"/>
       </operator>
-      <operator activated="true" class="select_by_weights" compatibility="7.5.003" expanded="true" height="103" name="Select by Weights" width="90" x="983" y="34">
+      <operator activated="true" class="select_by_weights" compatibility="7.6.000" expanded="true" height="103" name="Select by Weights" width="90" x="983" y="34">
         <parameter key="weight_relation" value="top p%"/>
         <parameter key="weight" value="1.0"/>
         <parameter key="k" value="10"/>
@@ -205,7 +211,7 @@
         <parameter key="deselect_unknown" value="true"/>
         <parameter key="use_absolute_weights" value="true"/>
       </operator>
-      <operator activated="true" class="concurrency:cross_validation" compatibility="7.5.003" expanded="true" height="145" name="Cross Validation" width="90" x="1117" y="34">
+      <operator activated="true" class="concurrency:cross_validation" compatibility="7.6.000" expanded="true" height="145" name="Cross Validation" width="90" x="1117" y="34">
         <parameter key="split_on_batch_attribute" value="false"/>
         <parameter key="leave_one_out" value="false"/>
         <parameter key="number_of_folds" value="5"/>
@@ -214,13 +220,13 @@
         <parameter key="local_random_seed" value="1992"/>
         <parameter key="enable_parallel_execution" value="true"/>
         <process expanded="true">
-          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.5.003" expanded="true" height="82" name="Ensemble Bagging Bayes" width="90" x="246" y="136">
+          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.6.000" expanded="true" height="82" name="Ensemble Bagging Bayes" width="90" x="246" y="136">
             <parameter key="classification_strategies" value="random code (ECOC)"/>
             <parameter key="random_code_multiplicator" value="6.0"/>
             <parameter key="use_local_random_seed" value="false"/>
             <parameter key="local_random_seed" value="2001"/>
             <process expanded="true">
-              <operator activated="true" class="bayesian_boosting" compatibility="7.5.003" expanded="true" height="82" name="Bayesian Boosting" width="90" x="447" y="34">
+              <operator activated="true" class="bayesian_boosting" compatibility="7.6.000" expanded="true" height="82" name="Bayesian Boosting" width="90" x="447" y="34">
                 <parameter key="use_subset_for_training" value="1.0"/>
                 <parameter key="iterations" value="10"/>
                 <parameter key="rescale_label_priors" value="true"/>
@@ -228,7 +234,7 @@
                 <parameter key="use_local_random_seed" value="false"/>
                 <parameter key="local_random_seed" value="1992"/>
                 <process expanded="true">
-                  <operator activated="true" class="naive_bayes" compatibility="7.5.003" expanded="true" height="82" name="Naive Bayes" width="90" x="447" y="34">
+                  <operator activated="true" class="naive_bayes" compatibility="7.6.000" expanded="true" height="82" name="Naive Bayes" width="90" x="447" y="34">
                     <parameter key="laplace_correction" value="true"/>
                   </operator>
                   <connect from_port="training set" to_op="Naive Bayes" to_port="training set"/>
@@ -243,13 +249,13 @@
               <portSpacing port="sink_model" spacing="0"/>
             </process>
           </operator>
-          <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.5.003" expanded="true" height="82" name="Ensemble Boosted Trees" width="90" x="246" y="34">
+          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.6.000" expanded="true" height="82" name="Ensemble Boosted Trees" width="90" x="246" y="34">
             <parameter key="classification_strategies" value="1 against 1"/>
             <parameter key="random_code_multiplicator" value="6.0"/>
             <parameter key="use_local_random_seed" value="false"/>
             <parameter key="local_random_seed" value="2001"/>
             <process expanded="true">
-              <operator activated="true" class="h2o:gradient_boosted_trees" compatibility="7.5.000" expanded="true" height="103" name="Gradient Boosted Trees" width="90" x="447" y="34">
+              <operator activated="true" class="h2o:gradient_boosted_trees" compatibility="7.6.000" expanded="true" height="103" name="Gradient Boosted Trees" width="90" x="447" y="34">
                 <parameter key="number_of_trees" value="20"/>
                 <parameter key="reproducible" value="false"/>
                 <parameter key="maximum_number_of_threads" value="4"/>
@@ -275,13 +281,13 @@
               <portSpacing port="sink_model" spacing="0"/>
             </process>
           </operator>
-          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.5.003" expanded="true" height="82" name="Ensemble SVM" width="90" x="246" y="238">
+          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.6.000" expanded="true" height="82" name="Ensemble SVM" width="90" x="246" y="238">
             <parameter key="classification_strategies" value="1 against 1"/>
             <parameter key="random_code_multiplicator" value="6.0"/>
             <parameter key="use_local_random_seed" value="false"/>
             <parameter key="local_random_seed" value="1992"/>
             <process expanded="true">
-              <operator activated="true" class="support_vector_machine" compatibility="7.5.003" expanded="true" height="124" name="SVM" width="90" x="447" y="34">
+              <operator activated="true" class="support_vector_machine" compatibility="7.6.000" expanded="true" height="124" name="SVM" width="90" x="447" y="34">
                 <parameter key="kernel_type" value="dot"/>
                 <parameter key="kernel_gamma" value="1.0"/>
                 <parameter key="kernel_sigma1" value="1.0"/>
@@ -314,13 +320,13 @@
               <portSpacing port="sink_model" spacing="0"/>
             </process>
           </operator>
-          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.5.003" expanded="true" height="82" name="Ensemble NN" width="90" x="246" y="340">
+          <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.000" expanded="true" height="82" name="Ensemble NN" width="90" x="246" y="340">
             <parameter key="classification_strategies" value="1 against 1"/>
             <parameter key="random_code_multiplicator" value="2.0"/>
             <parameter key="use_local_random_seed" value="false"/>
             <parameter key="local_random_seed" value="1992"/>
             <process expanded="true">
-              <operator activated="false" class="h2o:deep_learning" compatibility="7.5.000" expanded="true" height="82" name="Deep Learning" width="90" x="447" y="34">
+              <operator activated="false" class="h2o:deep_learning" compatibility="7.6.000" expanded="true" height="82" name="Deep Learning" width="90" x="447" y="34">
                 <parameter key="activation" value="Rectifier"/>
                 <enumeration key="hidden_layer_sizes">
                   <parameter key="hidden_layer_sizes" value="50"/>
@@ -362,7 +368,7 @@
                 <list key="expert_parameters"/>
                 <list key="expert_parameters_"/>
               </operator>
-              <operator activated="false" class="h2o:deep_learning" compatibility="7.5.000" expanded="true" height="82" name="Deep Learning 3 Layer DTO" width="90" x="447" y="289">
+              <operator activated="false" class="h2o:deep_learning" compatibility="7.6.000" expanded="true" height="82" name="Deep Learning 3 Layer DTO" width="90" x="447" y="289">
                 <parameter key="activation" value="TanhWithDropout"/>
                 <enumeration key="hidden_layer_sizes">
                   <parameter key="hidden_layer_sizes" value="75"/>
@@ -405,7 +411,7 @@
                 <list key="expert_parameters"/>
                 <list key="expert_parameters_"/>
               </operator>
-              <operator activated="true" class="h2o:deep_learning" compatibility="7.5.000" expanded="true" height="82" name="Deep Learning 3 Layer DTO (2)" width="90" x="447" y="187">
+              <operator activated="true" class="h2o:deep_learning" compatibility="7.6.000" expanded="true" height="82" name="Deep Learning 3 Layer DTO (2)" width="90" x="447" y="187">
                 <parameter key="activation" value="TanhWithDropout"/>
                 <enumeration key="hidden_layer_sizes">
                   <parameter key="hidden_layer_sizes" value="75"/>
@@ -454,13 +460,13 @@
               <portSpacing port="sink_model" spacing="0"/>
             </process>
           </operator>
-          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.5.003" expanded="true" height="82" name="Ensemble k-NN" width="90" x="246" y="442">
+          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.6.000" expanded="true" height="82" name="Ensemble k-NN" width="90" x="246" y="442">
             <parameter key="classification_strategies" value="1 against 1"/>
             <parameter key="random_code_multiplicator" value="10.0"/>
             <parameter key="use_local_random_seed" value="false"/>
             <parameter key="local_random_seed" value="2001"/>
             <process expanded="true">
-              <operator activated="true" class="k_nn" compatibility="7.5.003" expanded="true" height="82" name="k-NN" width="90" x="447" y="34">
+              <operator activated="true" class="k_nn" compatibility="7.6.000" expanded="true" height="82" name="k-NN" width="90" x="447" y="34">
                 <parameter key="k" value="12"/>
                 <parameter key="weighted_vote" value="true"/>
                 <parameter key="measure_types" value="MixedMeasures"/>
@@ -484,7 +490,7 @@
               <portSpacing port="sink_model" spacing="0"/>
             </process>
           </operator>
-          <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.5.003" expanded="true" height="82" name="Ensemble Logistic Regression" width="90" x="246" y="544">
+          <operator activated="false" class="polynomial_by_binomial_classification" compatibility="7.6.000" expanded="true" height="82" name="Ensemble Logistic Regression" width="90" x="246" y="544">
             <parameter key="classification_strategies" value="1 against 1"/>
             <parameter key="random_code_multiplicator" value="6.0"/>
             <parameter key="use_local_random_seed" value="false"/>
@@ -516,18 +522,18 @@
               <portSpacing port="sink_model" spacing="0"/>
             </process>
           </operator>
-          <connect from_port="training set" to_op="Ensemble Boosted Trees" to_port="training set"/>
-          <connect from_op="Ensemble Boosted Trees" from_port="model" to_port="model"/>
+          <connect from_port="training set" to_op="Ensemble NN" to_port="training set"/>
+          <connect from_op="Ensemble NN" from_port="model" to_port="model"/>
           <portSpacing port="source_training set" spacing="0"/>
           <portSpacing port="sink_model" spacing="0"/>
           <portSpacing port="sink_through 1" spacing="0"/>
         </process>
         <process expanded="true">
-          <operator activated="true" class="apply_model" compatibility="7.5.003" expanded="true" height="82" name="Apply Model" width="90" x="112" y="34">
+          <operator activated="true" class="apply_model" compatibility="7.6.000" expanded="true" height="82" name="Apply Model" width="90" x="112" y="34">
             <list key="application_parameters"/>
             <parameter key="create_view" value="false"/>
           </operator>
-          <operator activated="true" class="performance_classification" compatibility="7.5.003" expanded="true" height="82" name="Performance" width="90" x="313" y="34">
+          <operator activated="true" class="performance_classification" compatibility="7.6.000" expanded="true" height="82" name="Performance" width="90" x="313" y="34">
             <parameter key="main_criterion" value="first"/>
             <parameter key="accuracy" value="true"/>
             <parameter key="classification_error" value="false"/>
@@ -554,7 +560,7 @@
             <parameter key="use_example_weights" value="false"/>
             <list key="class_weights"/>
           </operator>
-          <operator activated="false" class="performance_classification" compatibility="7.5.003" expanded="true" height="82" name="Performance 3 Targets" width="90" x="313" y="391">
+          <operator activated="false" class="performance_classification" compatibility="7.6.000" expanded="true" height="82" name="Performance 3 Targets" width="90" x="313" y="391">
             <parameter key="main_criterion" value="first"/>
             <parameter key="accuracy" value="true"/>
             <parameter key="classification_error" value="false"/>
@@ -585,7 +591,7 @@
               <parameter key="L" value="235.0"/>
             </list>
           </operator>
-          <operator activated="false" class="performance_classification" compatibility="7.5.003" expanded="true" height="82" name="Performance 6 Targets" width="90" x="112" y="391">
+          <operator activated="false" class="performance_classification" compatibility="7.6.000" expanded="true" height="82" name="Performance 6 Targets" width="90" x="112" y="391">
             <parameter key="main_criterion" value="first"/>
             <parameter key="accuracy" value="true"/>
             <parameter key="classification_error" value="false"/>
@@ -619,7 +625,7 @@
               <parameter key="-1" value="5.0"/>
             </list>
           </operator>
-          <operator activated="false" class="performance_binominal_classification" compatibility="7.5.003" expanded="true" height="82" name="Binomial Performance" width="90" x="313" y="493">
+          <operator activated="false" class="performance_binominal_classification" compatibility="7.6.000" expanded="true" height="82" name="Binomial Performance" width="90" x="313" y="493">
             <parameter key="main_criterion" value="first"/>
             <parameter key="accuracy" value="true"/>
             <parameter key="classification_error" value="false"/>
@@ -658,28 +664,28 @@
           <portSpacing port="sink_performance 2" spacing="0"/>
         </process>
       </operator>
-      <operator activated="true" class="store" compatibility="7.5.003" expanded="true" height="68" name="Store" width="90" x="1117" y="187">
+      <operator activated="true" class="store" compatibility="7.6.000" expanded="true" height="68" name="Store" width="90" x="1117" y="187">
         <parameter key="repository_entry" value="../data/models/Fiveclass"/>
       </operator>
-      <connect from_port="input 1" to_op="Load Datasets" to_port="input 1"/>
-      <connect from_op="Load Datasets" from_port="result 1" to_op="Join Sets" to_port="input 1"/>
-      <connect from_op="Load Datasets" from_port="result 2" to_op="Join Sets" to_port="input 2"/>
-      <connect from_op="Load Datasets" from_port="result 3" to_op="Join Sets" to_port="input 3"/>
-      <connect from_op="Load Datasets" from_port="result 4" to_op="Join Sets" to_port="input 4"/>
-      <connect from_op="Join Sets" from_port="result 1" to_op="Python Select Attributes" to_port="input 1"/>
-      <connect from_op="Python Select Attributes" from_port="result 1" to_op="Set Role" to_port="example set input"/>
-      <connect from_op="Set Role" from_port="example set output" to_op="Fiveclass Map" to_port="example set input"/>
-      <connect from_op="Fiveclass Map" from_port="original" to_op="Nominal to Numerical" to_port="example set input"/>
+      <connect from_op="Execute Load Datasets From Repository" from_port="result 1" to_op="Execute Join Datasets" to_port="input 1"/>
+      <connect from_op="Execute Load Datasets From Repository" from_port="result 2" to_op="Execute Join Datasets" to_port="input 2"/>
+      <connect from_op="Execute Load Datasets From Repository" from_port="result 3" to_op="Execute Join Datasets" to_port="input 3"/>
+      <connect from_op="Execute Load Datasets From Repository" from_port="result 4" to_op="Execute Join Datasets" to_port="input 4"/>
+      <connect from_op="Execute Join Datasets" from_port="result 1" to_op="Execute Python Attribute Select" to_port="input 1"/>
+      <connect from_op="Execute Python Attribute Select" from_port="result 1" to_op="Set Role" to_port="example set input"/>
+      <connect from_op="Set Role" from_port="example set output" to_op="Ternary Map" to_port="example set input"/>
+      <connect from_op="Ternary Map" from_port="example set output" to_op="Nominal to Numerical" to_port="example set input"/>
       <connect from_op="Nominal to Numerical" from_port="example set output" to_op="Weight by Correlation" to_port="example set"/>
       <connect from_op="Weight by Correlation" from_port="weights" to_op="Select by Weights" to_port="weights"/>
       <connect from_op="Weight by Correlation" from_port="example set" to_op="Select by Weights" to_port="example set input"/>
       <connect from_op="Select by Weights" from_port="example set output" to_op="Cross Validation" to_port="example set"/>
       <connect from_op="Cross Validation" from_port="model" to_op="Store" to_port="input"/>
       <connect from_op="Cross Validation" from_port="performance 1" to_port="result 1"/>
+      <connect from_op="Store" from_port="through" to_port="result 2"/>
       <portSpacing port="source_input 1" spacing="0"/>
-      <portSpacing port="source_input 2" spacing="0"/>
       <portSpacing port="sink_result 1" spacing="0"/>
       <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
     </process>
   </operator>
 </process>

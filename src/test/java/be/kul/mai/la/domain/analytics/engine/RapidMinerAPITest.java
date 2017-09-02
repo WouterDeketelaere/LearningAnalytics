@@ -20,6 +20,7 @@ public class RapidMinerAPITest {
         rapidMinerAPI.getMacroMap()
                 .reset()
                 .run_type("2")
+                .type("roc")
                 .instrument("7")
                 .activate();
         rapidMinerAPI.setMacroValue("studentids", "2609;189631");
@@ -32,8 +33,8 @@ public class RapidMinerAPITest {
         rapidMinerAPI.getMacroMap()
                 .reset()
                 .run_type("2")
+                .type("ensemble")
                 .instrument("1")
-                .modelname("NN_Multiclass")
                 .studentids("2609;189631")
                 .activate();
         List<RapidminerResult> rapidminerResults = rapidMinerAPI.runProcess();
@@ -42,12 +43,15 @@ public class RapidMinerAPITest {
 
     @Test
     public void runTrain() throws Exception {
-        rapidMinerAPI.setProcessName("Train_Process");
+        rapidMinerAPI.setProcessName("Main");
         for (int instrument = 1; instrument < 6;instrument++) {
             for (int mapper = 1; mapper < 6 ; mapper++) {
                 rapidMinerAPI.getMacroMap()
                         .reset()
                         .run_type("2")
+                        .type("ensemble")
+                        .filtercode("11,12,13")
+                        .comprehensive("true")
                         .instrument(String.valueOf(instrument))
                         .mapper(String.valueOf(mapper))
                         .activate();
@@ -55,5 +59,12 @@ public class RapidMinerAPITest {
             }
             //rapidminerResults.forEach(rapidminerResult -> System.out.println(rapidminerResult.toJSON()));
         }
+    }
+
+    @Test
+    public void runRadar() throws Exception{
+        rapidMinerAPI.setProcessName("ClusterAnalysis");
+        List<RapidminerResult> rapidminerResults = rapidMinerAPI.runProcess();
+        System.out.println("Dummy");
     }
 }

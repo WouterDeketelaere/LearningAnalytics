@@ -84,7 +84,7 @@ public class RapidMinerAPI {
         processListener.attachListener(process);
 
         // check if this process has a JSON output
-        Operator json_output = process.getOperator("Generate output");
+        Operator json_output = process.getOperator("Output 1");
         if (json_output == null)
             throw new LAException("Process doesn't output JSON");
 

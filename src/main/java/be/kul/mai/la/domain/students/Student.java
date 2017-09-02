@@ -18,18 +18,14 @@ public class Student {
     private Integer stamnummer;
     @Field("Academiejaar")
     private String academiejaar;
-    @Field("CSE Januari")
-    private Double CSE_Januari;
-
-    //    private String CSE_Juni;
+        //    private String CSE_Juni;
     //    private String CSE_September;
 
     private List<Course> courses;
 
-    public Student(Integer stamnummer, String academiejaar, Double CSE_Januari, List<Course> courses) {
+    public Student(Integer stamnummer, String academiejaar, List<Course> courses) {
         this.stamnummer = stamnummer;
         this.academiejaar = academiejaar;
-        this.CSE_Januari = CSE_Januari;
         this.courses = courses;
     }
 
@@ -43,10 +39,6 @@ public class Student {
 
     public String getAcademiejaar() {
         return academiejaar;
-    }
-
-    public Double getCSE_Januari() {
-        return CSE_Januari;
     }
 
     public List<Course> getCourses() {

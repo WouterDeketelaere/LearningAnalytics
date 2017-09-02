@@ -1,4 +1,5 @@
 $('#fc_slider_attribute').slider({});
+
 // This function (re)draws a barchart from the attribute weighting data
 function plot_attribute_weights(url) {
     // set the dimensions and margins of the graph
@@ -27,6 +28,13 @@ function plot_attribute_weights(url) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    var tool_tip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-8, 0])
+        .html(function (d) {
+            return d.Attribute + "<br>Weight: " + roundValue(d.Weight, 3);
+        });
+    svg.call(tool_tip);
 
     d3.json(url, function (error, data) {
         if (error) throw error;
@@ -58,7 +66,9 @@ function plot_attribute_weights(url) {
             })
             .attr("height", function (d) {
                 return height - y(d.Weight);
-            });
+            })
+            .on('mouseover', tool_tip.show)
+            .on('mouseout', tool_tip.hide);
 
         // add the x Axis
         svg.append("g")

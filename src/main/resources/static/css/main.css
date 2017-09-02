@@ -6,10 +6,27 @@
     margin-top: 1%;
 }
 
-#lagraph{
-    margin:auto;
+#lagraph {
+    margin: auto;
 }
 
-.top-buffer{
-    margin:1%;
+.top-buffer {
+    margin-top: 2%;
 }
+
+#weights_btn {
+    margin: 5% auto;
+    width: 80%;
+    height: 10%;
+}
+#predict_btn{
+    margin: 1% auto;
+    width: 80%;
+}
+
+.toggle.btn {
+    margin-left: -1px;
+    margin-right: -1px;
+}
+
+.chosen-container { width: 100% !important; }

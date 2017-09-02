@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><process version="7.5.003">
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.001">
   <context>
     <input/>
     <output/>
-    <macros/>
+    <macros>
+      <macro>
+        <key>modelname1</key>
+        <value>ROC_A_BC_model</value>
+      </macro>
+      <macro>
+        <key>modelname2</key>
+        <value>ROC_C_AB_model</value>
+      </macro>
+    </macros>
   </context>
-  <operator activated="true" class="process" compatibility="7.5.003" expanded="true" name="Process">
+  <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
     <parameter key="logverbosity" value="init"/>
     <parameter key="random_seed" value="2001"/>
     <parameter key="send_mail" value="never"/>
@@ -12,18 +21,18 @@
     <parameter key="process_duration_for_mail" value="30"/>
     <parameter key="encoding" value="SYSTEM"/>
     <process expanded="true">
-      <operator activated="true" class="free_memory" compatibility="7.5.003" expanded="true" height="82" name="Free Memory" width="90" x="80" y="34"/>
-      <operator activated="true" class="set_role" compatibility="7.5.003" expanded="true" height="82" name="Set Target Attribute" width="90" x="243" y="34">
-        <parameter key="attribute_name" value="%{targets}"/>
+      <operator activated="true" class="set_role" compatibility="7.6.001" expanded="true" height="82" name="Set Target Attribute" width="90" x="139" y="34">
+        <parameter key="attribute_name" value="Doorloop: Studieduur"/>
         <parameter key="target_role" value="label"/>
         <list key="set_additional_roles">
           <parameter key="Stamnummer student" value="id"/>
         </list>
+        <description align="left" color="transparent" colored="false" width="126">Target = always Doorloop: Studieduur</description>
       </operator>
-      <operator activated="true" class="subprocess" compatibility="7.5.003" expanded="true" height="103" name="ROC Target Mapper" width="90" x="406" y="34">
+      <operator activated="true" class="subprocess" compatibility="7.6.001" expanded="true" height="103" name="ROC Target Mapper" width="90" x="362" y="34">
         <process expanded="true">
-          <operator activated="true" class="multiply" compatibility="7.5.003" expanded="true" height="103" name="Multiply" width="90" x="77" y="84"/>
-          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Binary C-AB" width="90" x="274" y="153">
+          <operator activated="true" class="multiply" compatibility="7.6.001" expanded="true" height="103" name="Multiply" width="90" x="68" y="34"/>
+          <operator activated="true" class="map" compatibility="7.6.001" expanded="true" height="82" name="Binary C-AB" width="90" x="277" y="262">
             <parameter key="attribute_filter_type" value="single"/>
             <parameter key="attribute" value="Doorloop: Studieduur"/>
             <parameter key="attributes" value=""/>
@@ -46,8 +55,9 @@
             </list>
             <parameter key="consider_regular_expressions" value="false"/>
             <parameter key="add_default_mapping" value="false"/>
+            <description align="left" color="transparent" colored="false" width="126">Target = always Doorloop: Studieduur</description>
           </operator>
-          <operator activated="true" class="nominal_to_binominal" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Binominal (2)" width="90" x="475" y="153">
+          <operator activated="true" class="nominal_to_binominal" compatibility="7.6.001" expanded="true" height="103" name="Nominal to Binominal (2)" width="90" x="475" y="262">
             <parameter key="return_preprocessing_model" value="false"/>
             <parameter key="create_view" value="false"/>
             <parameter key="attribute_filter_type" value="single"/>
@@ -65,7 +75,7 @@
             <parameter key="transform_binominal" value="false"/>
             <parameter key="use_underscore_in_name" value="false"/>
           </operator>
-          <operator activated="true" class="remap_binominals" compatibility="7.5.003" expanded="true" height="82" name="Remap Binominals (2)" width="90" x="676" y="153">
+          <operator activated="true" class="remap_binominals" compatibility="7.6.001" expanded="true" height="82" name="Remap Binominals (2)" width="90" x="676" y="262">
             <parameter key="attribute_filter_type" value="single"/>
             <parameter key="attribute" value="Doorloop: Studieduur"/>
             <parameter key="attributes" value=""/>
@@ -81,7 +91,7 @@
             <parameter key="negative_value" value="AB"/>
             <parameter key="positive_value" value="C"/>
           </operator>
-          <operator activated="true" class="map" compatibility="7.5.003" expanded="true" height="82" name="Binary A-BC" width="90" x="273" y="34">
+          <operator activated="true" class="map" compatibility="7.6.001" expanded="true" height="82" name="Binary A-BC" width="90" x="278" y="34">
             <parameter key="attribute_filter_type" value="single"/>
             <parameter key="attribute" value="Doorloop: Studieduur"/>
             <parameter key="attributes" value=""/>
@@ -104,8 +114,9 @@
             </list>
             <parameter key="consider_regular_expressions" value="false"/>
             <parameter key="add_default_mapping" value="false"/>
+            <description align="left" color="transparent" colored="false" width="126">Target = always Doorloop: Studieduur</description>
           </operator>
-          <operator activated="true" class="nominal_to_binominal" compatibility="7.5.003" expanded="true" height="103" name="Nominal to Binominal" width="90" x="474" y="34">
+          <operator activated="true" class="nominal_to_binominal" compatibility="7.6.001" expanded="true" height="103" name="Nominal to Binominal" width="90" x="468" y="34">
             <parameter key="return_preprocessing_model" value="false"/>
             <parameter key="create_view" value="false"/>
             <parameter key="attribute_filter_type" value="single"/>
@@ -123,7 +134,7 @@
             <parameter key="transform_binominal" value="false"/>
             <parameter key="use_underscore_in_name" value="false"/>
           </operator>
-          <operator activated="true" class="remap_binominals" compatibility="7.5.003" expanded="true" height="82" name="Remap Binominals" width="90" x="675" y="34">
+          <operator activated="true" class="remap_binominals" compatibility="7.6.001" expanded="true" height="82" name="Remap Binominals" width="90" x="675" y="34">
             <parameter key="attribute_filter_type" value="single"/>
             <parameter key="attribute" value="Doorloop: Studieduur"/>
             <parameter key="attributes" value=""/>
@@ -155,7 +166,7 @@
           <portSpacing port="sink_out 3" spacing="0"/>
         </process>
       </operator>
-      <operator activated="true" class="concurrency:cross_validation" compatibility="7.5.003" expanded="true" height="145" name="Model A-BC" width="90" x="643" y="34">
+      <operator activated="true" class="concurrency:cross_validation" compatibility="7.6.001" expanded="true" height="145" name="Model A-BC" width="90" x="594" y="34">
         <parameter key="split_on_batch_attribute" value="false"/>
         <parameter key="leave_one_out" value="false"/>
         <parameter key="number_of_folds" value="5"/>
@@ -164,7 +175,7 @@
         <parameter key="local_random_seed" value="1992"/>
         <parameter key="enable_parallel_execution" value="true"/>
         <process expanded="true">
-          <operator activated="true" class="h2o:deep_learning" compatibility="7.5.000" expanded="true" height="82" name="Deep Learning 1" width="90" x="246" y="34">
+          <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning 1" width="90" x="246" y="34">
             <parameter key="activation" value="TanhWithDropout"/>
             <enumeration key="hidden_layer_sizes">
               <parameter key="hidden_layer_sizes" value="75"/>
@@ -214,11 +225,11 @@
           <portSpacing port="sink_through 1" spacing="0"/>
         </process>
         <process expanded="true">
-          <operator activated="true" class="apply_model" compatibility="7.5.003" expanded="true" height="82" name="Apply Model 1" width="90" x="112" y="34">
+          <operator activated="true" class="apply_model" compatibility="7.6.001" expanded="true" height="82" name="Apply Model 1" width="90" x="112" y="34">
             <list key="application_parameters"/>
             <parameter key="create_view" value="false"/>
           </operator>
-          <operator activated="true" class="performance_binominal_classification" compatibility="7.5.003" expanded="true" height="82" name="Performance Model 1" width="90" x="246" y="34">
+          <operator activated="true" class="performance_binominal_classification" compatibility="7.6.001" expanded="true" height="82" name="Performance Model 1" width="90" x="246" y="34">
             <parameter key="main_criterion" value="first"/>
             <parameter key="accuracy" value="true"/>
             <parameter key="classification_error" value="false"/>
@@ -256,10 +267,10 @@
           <portSpacing port="sink_performance 2" spacing="0"/>
         </process>
       </operator>
-      <operator activated="true" class="store" compatibility="7.5.003" expanded="true" height="68" name="Store A-BC Model" width="90" x="791" y="34">
+      <operator activated="true" class="store" compatibility="7.6.001" expanded="true" height="68" name="Store A-BC Model" width="90" x="791" y="34">
         <parameter key="repository_entry" value="../../../../data/models/%{modelname1}"/>
       </operator>
-      <operator activated="true" class="concurrency:cross_validation" compatibility="7.5.003" expanded="true" height="145" name="Model C-AB" width="90" x="645" y="189">
+      <operator activated="true" class="concurrency:cross_validation" compatibility="7.6.001" expanded="true" height="145" name="Model C-AB" width="90" x="596" y="238">
         <parameter key="split_on_batch_attribute" value="false"/>
         <parameter key="leave_one_out" value="false"/>
         <parameter key="number_of_folds" value="5"/>
@@ -268,7 +279,7 @@
         <parameter key="local_random_seed" value="1992"/>
         <parameter key="enable_parallel_execution" value="true"/>
         <process expanded="true">
-          <operator activated="true" class="h2o:deep_learning" compatibility="7.5.000" expanded="true" height="82" name="Deep Learning 2" width="90" x="246" y="34">
+          <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning 2" width="90" x="246" y="34">
             <parameter key="activation" value="TanhWithDropout"/>
             <enumeration key="hidden_layer_sizes">
               <parameter key="hidden_layer_sizes" value="75"/>
@@ -318,11 +329,11 @@
           <portSpacing port="sink_through 1" spacing="0"/>
         </process>
         <process expanded="true">
-          <operator activated="true" class="apply_model" compatibility="7.5.003" expanded="true" height="82" name="Apply Model 2" width="90" x="112" y="34">
+          <operator activated="true" class="apply_model" compatibility="7.6.001" expanded="true" height="82" name="Apply Model 2" width="90" x="112" y="34">
             <list key="application_parameters"/>
             <parameter key="create_view" value="false"/>
           </operator>
-          <operator activated="true" class="performance_binominal_classification" compatibility="7.5.003" expanded="true" height="82" name="Performance Model 2" width="90" x="313" y="34">
+          <operator activated="true" class="performance_binominal_classification" compatibility="7.6.001" expanded="true" height="82" name="Performance Model 2" width="90" x="313" y="34">
             <parameter key="main_criterion" value="first"/>
             <parameter key="accuracy" value="true"/>
             <parameter key="classification_error" value="false"/>
@@ -360,27 +371,23 @@
           <portSpacing port="sink_performance 2" spacing="0"/>
         </process>
       </operator>
-      <operator activated="true" class="store" compatibility="7.5.003" expanded="true" height="68" name="Store C-AB Model" width="90" x="800" y="187">
+      <operator activated="true" class="store" compatibility="7.6.001" expanded="true" height="68" name="Store C-AB Model" width="90" x="812" y="238">
         <parameter key="repository_entry" value="../../../../data/models/%{modelname2}"/>
       </operator>
-      <connect from_port="input 1" to_op="Free Memory" to_port="through 1"/>
-      <connect from_op="Free Memory" from_port="through 1" to_op="Set Target Attribute" to_port="example set input"/>
+      <connect from_port="input 1" to_op="Set Target Attribute" to_port="example set input"/>
       <connect from_op="Set Target Attribute" from_port="example set output" to_op="ROC Target Mapper" to_port="in 1"/>
       <connect from_op="ROC Target Mapper" from_port="out 1" to_op="Model A-BC" to_port="example set"/>
       <connect from_op="ROC Target Mapper" from_port="out 2" to_op="Model C-AB" to_port="example set"/>
       <connect from_op="Model A-BC" from_port="model" to_op="Store A-BC Model" to_port="input"/>
       <connect from_op="Model A-BC" from_port="performance 1" to_port="result 1"/>
-      <connect from_op="Store A-BC Model" from_port="through" to_port="result 3"/>
       <connect from_op="Model C-AB" from_port="model" to_op="Store C-AB Model" to_port="input"/>
       <connect from_op="Model C-AB" from_port="performance 1" to_port="result 2"/>
-      <connect from_op="Store C-AB Model" from_port="through" to_port="result 4"/>
       <portSpacing port="source_input 1" spacing="0"/>
       <portSpacing port="source_input 2" spacing="0"/>
       <portSpacing port="sink_result 1" spacing="0"/>
       <portSpacing port="sink_result 2" spacing="0"/>
       <portSpacing port="sink_result 3" spacing="0"/>
-      <portSpacing port="sink_result 4" spacing="0"/>
-      <portSpacing port="sink_result 5" spacing="0"/>
+      <description align="left" color="transparent" colored="true" height="94" resized="true" width="312" x="720" y="132">Modelnames are always ROC_model_1 &amp;amp; ROC_model_2 unless macro values modelname1 and modelname2 are passed in by calling process.&lt;br/&gt;See Context</description>
     </process>
   </operator>
 </process>
