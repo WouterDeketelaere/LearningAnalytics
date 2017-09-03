@@ -11,6 +11,10 @@
         <key>modelname2</key>
         <value>ROC_C_AB_model</value>
       </macro>
+      <macro>
+        <key>instrument</key>
+        <value>4</value>
+      </macro>
     </macros>
   </context>
   <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
@@ -175,51 +179,255 @@
         <parameter key="local_random_seed" value="1992"/>
         <parameter key="enable_parallel_execution" value="true"/>
         <process expanded="true">
-          <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning 1" width="90" x="246" y="34">
-            <parameter key="activation" value="TanhWithDropout"/>
-            <enumeration key="hidden_layer_sizes">
-              <parameter key="hidden_layer_sizes" value="75"/>
-              <parameter key="hidden_layer_sizes" value="25"/>
-              <parameter key="hidden_layer_sizes" value="3"/>
-            </enumeration>
-            <enumeration key="hidden_dropout_ratios">
-              <parameter key="hidden_dropout_ratio" value="0.75"/>
-              <parameter key="hidden_dropout_ratio" value="0.2"/>
-              <parameter key="hidden_dropout_ratio" value="0.05"/>
-            </enumeration>
-            <parameter key="reproducible_(uses_1_thread)" value="false"/>
-            <parameter key="use_local_random_seed" value="false"/>
-            <parameter key="local_random_seed" value="1992"/>
-            <parameter key="epochs" value="10.0"/>
-            <parameter key="compute_variable_importances" value="false"/>
-            <parameter key="train_samples_per_iteration" value="-2"/>
-            <parameter key="adaptive_rate" value="true"/>
-            <parameter key="epsilon" value="1.0E-8"/>
-            <parameter key="rho" value="0.99"/>
-            <parameter key="learning_rate" value="0.005"/>
-            <parameter key="learning_rate_annealing" value="1.0E-6"/>
-            <parameter key="learning_rate_decay" value="1.0"/>
-            <parameter key="momentum_start" value="0.0"/>
-            <parameter key="momentum_ramp" value="1000000.0"/>
-            <parameter key="momentum_stable" value="0.0"/>
-            <parameter key="nesterov_accelerated_gradient" value="true"/>
-            <parameter key="standardize" value="true"/>
-            <parameter key="L1" value="1.0E-5"/>
-            <parameter key="L2" value="0.0"/>
-            <parameter key="max_w2" value="10.0"/>
-            <parameter key="loss_function" value="Automatic"/>
-            <parameter key="distribution_function" value="AUTO"/>
-            <parameter key="early_stopping" value="false"/>
-            <parameter key="stopping_rounds" value="1"/>
-            <parameter key="stopping_metric" value="AUTO"/>
-            <parameter key="stopping_tolerance" value="0.001"/>
-            <parameter key="missing_values_handling" value="MeanImputation"/>
-            <parameter key="max_runtime_seconds" value="0"/>
-            <list key="expert_parameters"/>
-            <list key="expert_parameters_"/>
+          <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="82" name="Instruments" width="90" x="230" y="34">
+            <parameter key="select_which" value="%{instrument}"/>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble Boosted Trees" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="6.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="2001"/>
+                <process expanded="true">
+                  <operator activated="true" class="h2o:gradient_boosted_trees" compatibility="7.6.001" expanded="true" height="103" name="Gradient Boosted Trees" width="90" x="447" y="34">
+                    <parameter key="number_of_trees" value="20"/>
+                    <parameter key="reproducible" value="false"/>
+                    <parameter key="maximum_number_of_threads" value="4"/>
+                    <parameter key="use_local_random_seed" value="false"/>
+                    <parameter key="local_random_seed" value="1992"/>
+                    <parameter key="maximal_depth" value="5"/>
+                    <parameter key="min_rows" value="10.0"/>
+                    <parameter key="min_split_improvement" value="0.0"/>
+                    <parameter key="number_of_bins" value="23"/>
+                    <parameter key="learning_rate" value="0.1"/>
+                    <parameter key="sample_rate" value="1.0"/>
+                    <parameter key="distribution" value="AUTO"/>
+                    <parameter key="early_stopping" value="false"/>
+                    <parameter key="stopping_rounds" value="1"/>
+                    <parameter key="stopping_metric" value="AUTO"/>
+                    <parameter key="stopping_tolerance" value="0.001"/>
+                    <parameter key="max_runtime_seconds" value="0"/>
+                    <list key="expert_parameters"/>
+                  </operator>
+                  <connect from_port="training set" to_op="Gradient Boosted Trees" to_port="training set"/>
+                  <connect from_op="Gradient Boosted Trees" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble Boosted Trees" to_port="training set"/>
+              <connect from_op="Ensemble Boosted Trees" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble Bagging Bayes" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="random code (ECOC)"/>
+                <parameter key="random_code_multiplicator" value="6.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="2001"/>
+                <process expanded="true">
+                  <operator activated="true" class="bayesian_boosting" compatibility="7.6.001" expanded="true" height="82" name="Bayesian Boosting" width="90" x="447" y="34">
+                    <parameter key="use_subset_for_training" value="1.0"/>
+                    <parameter key="iterations" value="10"/>
+                    <parameter key="rescale_label_priors" value="true"/>
+                    <parameter key="allow_marginal_skews" value="true"/>
+                    <parameter key="use_local_random_seed" value="false"/>
+                    <parameter key="local_random_seed" value="1992"/>
+                    <process expanded="true">
+                      <operator activated="true" class="naive_bayes" compatibility="7.6.001" expanded="true" height="82" name="Naive Bayes" width="90" x="447" y="34">
+                        <parameter key="laplace_correction" value="true"/>
+                      </operator>
+                      <connect from_port="training set" to_op="Naive Bayes" to_port="training set"/>
+                      <connect from_op="Naive Bayes" from_port="model" to_port="model"/>
+                      <portSpacing port="source_training set" spacing="0"/>
+                      <portSpacing port="sink_model" spacing="0"/>
+                    </process>
+                  </operator>
+                  <connect from_port="training set" to_op="Bayesian Boosting" to_port="training set"/>
+                  <connect from_op="Bayesian Boosting" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble Bagging Bayes" to_port="training set"/>
+              <connect from_op="Ensemble Bagging Bayes" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble SVM" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="6.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="1992"/>
+                <process expanded="true">
+                  <operator activated="true" class="support_vector_machine" compatibility="7.6.001" expanded="true" height="124" name="SVM" width="90" x="447" y="34">
+                    <parameter key="kernel_type" value="dot"/>
+                    <parameter key="kernel_gamma" value="1.0"/>
+                    <parameter key="kernel_sigma1" value="1.0"/>
+                    <parameter key="kernel_sigma2" value="0.0"/>
+                    <parameter key="kernel_sigma3" value="2.0"/>
+                    <parameter key="kernel_shift" value="1.0"/>
+                    <parameter key="kernel_degree" value="2.0"/>
+                    <parameter key="kernel_a" value="1.0"/>
+                    <parameter key="kernel_b" value="0.0"/>
+                    <parameter key="kernel_cache" value="200"/>
+                    <parameter key="C" value="0.0"/>
+                    <parameter key="convergence_epsilon" value="0.001"/>
+                    <parameter key="max_iterations" value="100000"/>
+                    <parameter key="scale" value="true"/>
+                    <parameter key="calculate_weights" value="true"/>
+                    <parameter key="return_optimization_performance" value="true"/>
+                    <parameter key="L_pos" value="1.0"/>
+                    <parameter key="L_neg" value="1.0"/>
+                    <parameter key="epsilon" value="0.0"/>
+                    <parameter key="epsilon_plus" value="0.0"/>
+                    <parameter key="epsilon_minus" value="0.0"/>
+                    <parameter key="balance_cost" value="false"/>
+                    <parameter key="quadratic_loss_pos" value="false"/>
+                    <parameter key="quadratic_loss_neg" value="false"/>
+                    <parameter key="estimate_performance" value="false"/>
+                  </operator>
+                  <connect from_port="training set" to_op="SVM" to_port="training set"/>
+                  <connect from_op="SVM" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble SVM" to_port="training set"/>
+              <connect from_op="Ensemble SVM" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble NN" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="2.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="1992"/>
+                <process expanded="true">
+                  <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning 3 Layer DTO" width="90" x="453" y="35">
+                    <parameter key="activation" value="TanhWithDropout"/>
+                    <enumeration key="hidden_layer_sizes">
+                      <parameter key="hidden_layer_sizes" value="75"/>
+                      <parameter key="hidden_layer_sizes" value="25"/>
+                      <parameter key="hidden_layer_sizes" value="3"/>
+                    </enumeration>
+                    <enumeration key="hidden_dropout_ratios">
+                      <parameter key="hidden_dropout_ratio" value="0.5"/>
+                      <parameter key="hidden_dropout_ratio" value="0.2"/>
+                      <parameter key="hidden_dropout_ratio" value="0.01"/>
+                    </enumeration>
+                    <parameter key="reproducible_(uses_1_thread)" value="false"/>
+                    <parameter key="use_local_random_seed" value="false"/>
+                    <parameter key="local_random_seed" value="1992"/>
+                    <parameter key="epochs" value="10.0"/>
+                    <parameter key="compute_variable_importances" value="false"/>
+                    <parameter key="train_samples_per_iteration" value="-2"/>
+                    <parameter key="adaptive_rate" value="true"/>
+                    <parameter key="epsilon" value="1.0E-8"/>
+                    <parameter key="rho" value="0.99"/>
+                    <parameter key="learning_rate" value="0.005"/>
+                    <parameter key="learning_rate_annealing" value="1.0E-6"/>
+                    <parameter key="learning_rate_decay" value="1.0"/>
+                    <parameter key="momentum_start" value="0.0"/>
+                    <parameter key="momentum_ramp" value="1000000.0"/>
+                    <parameter key="momentum_stable" value="0.0"/>
+                    <parameter key="nesterov_accelerated_gradient" value="true"/>
+                    <parameter key="standardize" value="true"/>
+                    <parameter key="L1" value="1.0E-5"/>
+                    <parameter key="L2" value="0.0"/>
+                    <parameter key="max_w2" value="10.0"/>
+                    <parameter key="loss_function" value="Automatic"/>
+                    <parameter key="distribution_function" value="AUTO"/>
+                    <parameter key="early_stopping" value="false"/>
+                    <parameter key="stopping_rounds" value="1"/>
+                    <parameter key="stopping_metric" value="AUTO"/>
+                    <parameter key="stopping_tolerance" value="0.001"/>
+                    <parameter key="missing_values_handling" value="MeanImputation"/>
+                    <parameter key="max_runtime_seconds" value="0"/>
+                    <list key="expert_parameters"/>
+                    <list key="expert_parameters_"/>
+                  </operator>
+                  <connect from_port="training set" to_op="Deep Learning 3 Layer DTO" to_port="training set"/>
+                  <connect from_op="Deep Learning 3 Layer DTO" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble NN" to_port="training set"/>
+              <connect from_op="Ensemble NN" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble k-NN" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="10.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="2001"/>
+                <process expanded="true">
+                  <operator activated="true" class="k_nn" compatibility="7.6.001" expanded="true" height="82" name="k-NN" width="90" x="447" y="34">
+                    <parameter key="k" value="12"/>
+                    <parameter key="weighted_vote" value="true"/>
+                    <parameter key="measure_types" value="MixedMeasures"/>
+                    <parameter key="mixed_measure" value="MixedEuclideanDistance"/>
+                    <parameter key="nominal_measure" value="SimpleMatchingSimilarity"/>
+                    <parameter key="numerical_measure" value="CorrelationSimilarity"/>
+                    <parameter key="divergence" value="GeneralizedIDivergence"/>
+                    <parameter key="kernel_type" value="radial"/>
+                    <parameter key="kernel_gamma" value="1.0"/>
+                    <parameter key="kernel_sigma1" value="1.0"/>
+                    <parameter key="kernel_sigma2" value="0.0"/>
+                    <parameter key="kernel_sigma3" value="2.0"/>
+                    <parameter key="kernel_degree" value="3.0"/>
+                    <parameter key="kernel_shift" value="1.0"/>
+                    <parameter key="kernel_a" value="1.0"/>
+                    <parameter key="kernel_b" value="0.0"/>
+                  </operator>
+                  <connect from_port="training set" to_op="k-NN" to_port="training set"/>
+                  <connect from_op="k-NN" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble k-NN" to_port="training set"/>
+              <connect from_op="Ensemble k-NN" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="concurrency:parallel_decision_tree" compatibility="7.6.001" expanded="true" height="82" name="Decision Tree" width="90" x="45" y="34">
+                <parameter key="criterion" value="information_gain"/>
+                <parameter key="maximal_depth" value="20"/>
+                <parameter key="apply_pruning" value="true"/>
+                <parameter key="confidence" value="0.25"/>
+                <parameter key="apply_prepruning" value="true"/>
+                <parameter key="minimal_gain" value="0.1"/>
+                <parameter key="minimal_leaf_size" value="2"/>
+                <parameter key="minimal_size_for_split" value="4"/>
+                <parameter key="number_of_prepruning_alternatives" value="3"/>
+              </operator>
+              <connect from_port="input 1" to_op="Decision Tree" to_port="training set"/>
+              <connect from_op="Decision Tree" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
           </operator>
-          <connect from_port="training set" to_op="Deep Learning 1" to_port="training set"/>
-          <connect from_op="Deep Learning 1" from_port="model" to_port="model"/>
+          <connect from_port="training set" to_op="Instruments" to_port="input 1"/>
+          <connect from_op="Instruments" from_port="output 1" to_port="model"/>
           <portSpacing port="source_training set" spacing="0"/>
           <portSpacing port="sink_model" spacing="0"/>
           <portSpacing port="sink_through 1" spacing="0"/>
@@ -279,51 +487,255 @@
         <parameter key="local_random_seed" value="1992"/>
         <parameter key="enable_parallel_execution" value="true"/>
         <process expanded="true">
-          <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning 2" width="90" x="246" y="34">
-            <parameter key="activation" value="TanhWithDropout"/>
-            <enumeration key="hidden_layer_sizes">
-              <parameter key="hidden_layer_sizes" value="75"/>
-              <parameter key="hidden_layer_sizes" value="25"/>
-              <parameter key="hidden_layer_sizes" value="3"/>
-            </enumeration>
-            <enumeration key="hidden_dropout_ratios">
-              <parameter key="hidden_dropout_ratio" value="0.75"/>
-              <parameter key="hidden_dropout_ratio" value="0.2"/>
-              <parameter key="hidden_dropout_ratio" value="0.05"/>
-            </enumeration>
-            <parameter key="reproducible_(uses_1_thread)" value="false"/>
-            <parameter key="use_local_random_seed" value="false"/>
-            <parameter key="local_random_seed" value="1992"/>
-            <parameter key="epochs" value="10.0"/>
-            <parameter key="compute_variable_importances" value="false"/>
-            <parameter key="train_samples_per_iteration" value="-2"/>
-            <parameter key="adaptive_rate" value="true"/>
-            <parameter key="epsilon" value="1.0E-8"/>
-            <parameter key="rho" value="0.99"/>
-            <parameter key="learning_rate" value="0.005"/>
-            <parameter key="learning_rate_annealing" value="1.0E-6"/>
-            <parameter key="learning_rate_decay" value="1.0"/>
-            <parameter key="momentum_start" value="0.0"/>
-            <parameter key="momentum_ramp" value="1000000.0"/>
-            <parameter key="momentum_stable" value="0.0"/>
-            <parameter key="nesterov_accelerated_gradient" value="true"/>
-            <parameter key="standardize" value="true"/>
-            <parameter key="L1" value="1.0E-5"/>
-            <parameter key="L2" value="0.0"/>
-            <parameter key="max_w2" value="10.0"/>
-            <parameter key="loss_function" value="Automatic"/>
-            <parameter key="distribution_function" value="AUTO"/>
-            <parameter key="early_stopping" value="false"/>
-            <parameter key="stopping_rounds" value="1"/>
-            <parameter key="stopping_metric" value="AUTO"/>
-            <parameter key="stopping_tolerance" value="0.001"/>
-            <parameter key="missing_values_handling" value="MeanImputation"/>
-            <parameter key="max_runtime_seconds" value="0"/>
-            <list key="expert_parameters"/>
-            <list key="expert_parameters_"/>
+          <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="82" name="Instruments (2)" width="90" x="237" y="34">
+            <parameter key="select_which" value="%{instrument}"/>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble Boosted Trees (2)" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="6.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="2001"/>
+                <process expanded="true">
+                  <operator activated="true" class="h2o:gradient_boosted_trees" compatibility="7.6.001" expanded="true" height="103" name="Gradient Boosted Trees (2)" width="90" x="447" y="34">
+                    <parameter key="number_of_trees" value="20"/>
+                    <parameter key="reproducible" value="false"/>
+                    <parameter key="maximum_number_of_threads" value="4"/>
+                    <parameter key="use_local_random_seed" value="false"/>
+                    <parameter key="local_random_seed" value="1992"/>
+                    <parameter key="maximal_depth" value="5"/>
+                    <parameter key="min_rows" value="10.0"/>
+                    <parameter key="min_split_improvement" value="0.0"/>
+                    <parameter key="number_of_bins" value="23"/>
+                    <parameter key="learning_rate" value="0.1"/>
+                    <parameter key="sample_rate" value="1.0"/>
+                    <parameter key="distribution" value="AUTO"/>
+                    <parameter key="early_stopping" value="false"/>
+                    <parameter key="stopping_rounds" value="1"/>
+                    <parameter key="stopping_metric" value="AUTO"/>
+                    <parameter key="stopping_tolerance" value="0.001"/>
+                    <parameter key="max_runtime_seconds" value="0"/>
+                    <list key="expert_parameters"/>
+                  </operator>
+                  <connect from_port="training set" to_op="Gradient Boosted Trees (2)" to_port="training set"/>
+                  <connect from_op="Gradient Boosted Trees (2)" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble Boosted Trees (2)" to_port="training set"/>
+              <connect from_op="Ensemble Boosted Trees (2)" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble Bagging Bayes (2)" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="random code (ECOC)"/>
+                <parameter key="random_code_multiplicator" value="6.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="2001"/>
+                <process expanded="true">
+                  <operator activated="true" class="bayesian_boosting" compatibility="7.6.001" expanded="true" height="82" name="Bayesian Boosting (2)" width="90" x="447" y="34">
+                    <parameter key="use_subset_for_training" value="1.0"/>
+                    <parameter key="iterations" value="10"/>
+                    <parameter key="rescale_label_priors" value="true"/>
+                    <parameter key="allow_marginal_skews" value="true"/>
+                    <parameter key="use_local_random_seed" value="false"/>
+                    <parameter key="local_random_seed" value="1992"/>
+                    <process expanded="true">
+                      <operator activated="true" class="naive_bayes" compatibility="7.6.001" expanded="true" height="82" name="Naive Bayes (2)" width="90" x="447" y="34">
+                        <parameter key="laplace_correction" value="true"/>
+                      </operator>
+                      <connect from_port="training set" to_op="Naive Bayes (2)" to_port="training set"/>
+                      <connect from_op="Naive Bayes (2)" from_port="model" to_port="model"/>
+                      <portSpacing port="source_training set" spacing="0"/>
+                      <portSpacing port="sink_model" spacing="0"/>
+                    </process>
+                  </operator>
+                  <connect from_port="training set" to_op="Bayesian Boosting (2)" to_port="training set"/>
+                  <connect from_op="Bayesian Boosting (2)" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble Bagging Bayes (2)" to_port="training set"/>
+              <connect from_op="Ensemble Bagging Bayes (2)" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble SVM (2)" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="6.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="1992"/>
+                <process expanded="true">
+                  <operator activated="true" class="support_vector_machine" compatibility="7.6.001" expanded="true" height="124" name="SVM (2)" width="90" x="447" y="34">
+                    <parameter key="kernel_type" value="dot"/>
+                    <parameter key="kernel_gamma" value="1.0"/>
+                    <parameter key="kernel_sigma1" value="1.0"/>
+                    <parameter key="kernel_sigma2" value="0.0"/>
+                    <parameter key="kernel_sigma3" value="2.0"/>
+                    <parameter key="kernel_shift" value="1.0"/>
+                    <parameter key="kernel_degree" value="2.0"/>
+                    <parameter key="kernel_a" value="1.0"/>
+                    <parameter key="kernel_b" value="0.0"/>
+                    <parameter key="kernel_cache" value="200"/>
+                    <parameter key="C" value="0.0"/>
+                    <parameter key="convergence_epsilon" value="0.001"/>
+                    <parameter key="max_iterations" value="100000"/>
+                    <parameter key="scale" value="true"/>
+                    <parameter key="calculate_weights" value="true"/>
+                    <parameter key="return_optimization_performance" value="true"/>
+                    <parameter key="L_pos" value="1.0"/>
+                    <parameter key="L_neg" value="1.0"/>
+                    <parameter key="epsilon" value="0.0"/>
+                    <parameter key="epsilon_plus" value="0.0"/>
+                    <parameter key="epsilon_minus" value="0.0"/>
+                    <parameter key="balance_cost" value="false"/>
+                    <parameter key="quadratic_loss_pos" value="false"/>
+                    <parameter key="quadratic_loss_neg" value="false"/>
+                    <parameter key="estimate_performance" value="false"/>
+                  </operator>
+                  <connect from_port="training set" to_op="SVM (2)" to_port="training set"/>
+                  <connect from_op="SVM (2)" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble SVM (2)" to_port="training set"/>
+              <connect from_op="Ensemble SVM (2)" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble NN (2)" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="2.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="1992"/>
+                <process expanded="true">
+                  <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning 3 Layer DTO (2)" width="90" x="453" y="35">
+                    <parameter key="activation" value="TanhWithDropout"/>
+                    <enumeration key="hidden_layer_sizes">
+                      <parameter key="hidden_layer_sizes" value="75"/>
+                      <parameter key="hidden_layer_sizes" value="25"/>
+                      <parameter key="hidden_layer_sizes" value="3"/>
+                    </enumeration>
+                    <enumeration key="hidden_dropout_ratios">
+                      <parameter key="hidden_dropout_ratio" value="0.5"/>
+                      <parameter key="hidden_dropout_ratio" value="0.2"/>
+                      <parameter key="hidden_dropout_ratio" value="0.01"/>
+                    </enumeration>
+                    <parameter key="reproducible_(uses_1_thread)" value="false"/>
+                    <parameter key="use_local_random_seed" value="false"/>
+                    <parameter key="local_random_seed" value="1992"/>
+                    <parameter key="epochs" value="10.0"/>
+                    <parameter key="compute_variable_importances" value="false"/>
+                    <parameter key="train_samples_per_iteration" value="-2"/>
+                    <parameter key="adaptive_rate" value="true"/>
+                    <parameter key="epsilon" value="1.0E-8"/>
+                    <parameter key="rho" value="0.99"/>
+                    <parameter key="learning_rate" value="0.005"/>
+                    <parameter key="learning_rate_annealing" value="1.0E-6"/>
+                    <parameter key="learning_rate_decay" value="1.0"/>
+                    <parameter key="momentum_start" value="0.0"/>
+                    <parameter key="momentum_ramp" value="1000000.0"/>
+                    <parameter key="momentum_stable" value="0.0"/>
+                    <parameter key="nesterov_accelerated_gradient" value="true"/>
+                    <parameter key="standardize" value="true"/>
+                    <parameter key="L1" value="1.0E-5"/>
+                    <parameter key="L2" value="0.0"/>
+                    <parameter key="max_w2" value="10.0"/>
+                    <parameter key="loss_function" value="Automatic"/>
+                    <parameter key="distribution_function" value="AUTO"/>
+                    <parameter key="early_stopping" value="false"/>
+                    <parameter key="stopping_rounds" value="1"/>
+                    <parameter key="stopping_metric" value="AUTO"/>
+                    <parameter key="stopping_tolerance" value="0.001"/>
+                    <parameter key="missing_values_handling" value="MeanImputation"/>
+                    <parameter key="max_runtime_seconds" value="0"/>
+                    <list key="expert_parameters"/>
+                    <list key="expert_parameters_"/>
+                  </operator>
+                  <connect from_port="training set" to_op="Deep Learning 3 Layer DTO (2)" to_port="training set"/>
+                  <connect from_op="Deep Learning 3 Layer DTO (2)" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble NN (2)" to_port="training set"/>
+              <connect from_op="Ensemble NN (2)" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="polynomial_by_binomial_classification" compatibility="7.6.001" expanded="true" height="82" name="Ensemble k-NN (2)" width="90" x="45" y="34">
+                <parameter key="classification_strategies" value="1 against 1"/>
+                <parameter key="random_code_multiplicator" value="10.0"/>
+                <parameter key="use_local_random_seed" value="false"/>
+                <parameter key="local_random_seed" value="2001"/>
+                <process expanded="true">
+                  <operator activated="true" class="k_nn" compatibility="7.6.001" expanded="true" height="82" name="k-NN (2)" width="90" x="447" y="34">
+                    <parameter key="k" value="12"/>
+                    <parameter key="weighted_vote" value="true"/>
+                    <parameter key="measure_types" value="MixedMeasures"/>
+                    <parameter key="mixed_measure" value="MixedEuclideanDistance"/>
+                    <parameter key="nominal_measure" value="SimpleMatchingSimilarity"/>
+                    <parameter key="numerical_measure" value="CorrelationSimilarity"/>
+                    <parameter key="divergence" value="GeneralizedIDivergence"/>
+                    <parameter key="kernel_type" value="radial"/>
+                    <parameter key="kernel_gamma" value="1.0"/>
+                    <parameter key="kernel_sigma1" value="1.0"/>
+                    <parameter key="kernel_sigma2" value="0.0"/>
+                    <parameter key="kernel_sigma3" value="2.0"/>
+                    <parameter key="kernel_degree" value="3.0"/>
+                    <parameter key="kernel_shift" value="1.0"/>
+                    <parameter key="kernel_a" value="1.0"/>
+                    <parameter key="kernel_b" value="0.0"/>
+                  </operator>
+                  <connect from_port="training set" to_op="k-NN (2)" to_port="training set"/>
+                  <connect from_op="k-NN (2)" from_port="model" to_port="model"/>
+                  <portSpacing port="source_training set" spacing="0"/>
+                  <portSpacing port="sink_model" spacing="0"/>
+                </process>
+              </operator>
+              <connect from_port="input 1" to_op="Ensemble k-NN (2)" to_port="training set"/>
+              <connect from_op="Ensemble k-NN (2)" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
+            <process expanded="true">
+              <operator activated="true" class="concurrency:parallel_decision_tree" compatibility="7.6.001" expanded="true" height="82" name="Decision Tree 2" width="90" x="45" y="34">
+                <parameter key="criterion" value="information_gain"/>
+                <parameter key="maximal_depth" value="20"/>
+                <parameter key="apply_pruning" value="true"/>
+                <parameter key="confidence" value="0.25"/>
+                <parameter key="apply_prepruning" value="true"/>
+                <parameter key="minimal_gain" value="0.1"/>
+                <parameter key="minimal_leaf_size" value="2"/>
+                <parameter key="minimal_size_for_split" value="4"/>
+                <parameter key="number_of_prepruning_alternatives" value="3"/>
+              </operator>
+              <connect from_port="input 1" to_op="Decision Tree 2" to_port="training set"/>
+              <connect from_op="Decision Tree 2" from_port="model" to_port="output 1"/>
+              <portSpacing port="source_input 1" spacing="0"/>
+              <portSpacing port="source_input 2" spacing="0"/>
+              <portSpacing port="sink_output 1" spacing="0"/>
+              <portSpacing port="sink_output 2" spacing="0"/>
+            </process>
           </operator>
-          <connect from_port="training set" to_op="Deep Learning 2" to_port="training set"/>
-          <connect from_op="Deep Learning 2" from_port="model" to_port="model"/>
+          <connect from_port="training set" to_op="Instruments (2)" to_port="input 1"/>
+          <connect from_op="Instruments (2)" from_port="output 1" to_port="model"/>
           <portSpacing port="source_training set" spacing="0"/>
           <portSpacing port="sink_model" spacing="0"/>
           <portSpacing port="sink_through 1" spacing="0"/>
@@ -380,13 +792,17 @@
       <connect from_op="ROC Target Mapper" from_port="out 2" to_op="Model C-AB" to_port="example set"/>
       <connect from_op="Model A-BC" from_port="model" to_op="Store A-BC Model" to_port="input"/>
       <connect from_op="Model A-BC" from_port="performance 1" to_port="result 1"/>
+      <connect from_op="Store A-BC Model" from_port="through" to_port="result 3"/>
       <connect from_op="Model C-AB" from_port="model" to_op="Store C-AB Model" to_port="input"/>
       <connect from_op="Model C-AB" from_port="performance 1" to_port="result 2"/>
+      <connect from_op="Store C-AB Model" from_port="through" to_port="result 4"/>
       <portSpacing port="source_input 1" spacing="0"/>
       <portSpacing port="source_input 2" spacing="0"/>
       <portSpacing port="sink_result 1" spacing="0"/>
       <portSpacing port="sink_result 2" spacing="0"/>
       <portSpacing port="sink_result 3" spacing="0"/>
+      <portSpacing port="sink_result 4" spacing="0"/>
+      <portSpacing port="sink_result 5" spacing="0"/>
       <description align="left" color="transparent" colored="true" height="94" resized="true" width="312" x="720" y="132">Modelnames are always ROC_model_1 &amp;amp; ROC_model_2 unless macro values modelname1 and modelname2 are passed in by calling process.&lt;br/&gt;See Context</description>
     </process>
   </operator>

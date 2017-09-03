@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utility Service Bean that prepopulates selection dropdown boxes like datasets, instruments, ...
+ */
 @Service
 public class InformationServiceImpl {
 
@@ -42,6 +45,20 @@ public class InformationServiceImpl {
         List<SelectOption> selectOptions = new ArrayList<>();
         for (int i = 1; i < input.size() + 1; i++) {
             selectOptions.add(new SelectOption(String.valueOf(i), input.get(i - 1)));
+        }
+        return selectOptions;
+    }
+
+    /**
+     * Because clustering can only be applied to IR or IRA dataset the values of the selection boxes are set to 2 and 3
+     * so these correct values will be used in the ClusteringAnalysis RM process.
+     * @return
+     */
+    public List<SelectOption> getClusterDatasets() {
+        List<String> input = Arrays.asList("Civil Engineering", "Civil Eng. Architecture");
+        List<SelectOption> selectOptions = new ArrayList<>();
+        for (int i = 1; i < input.size() + 1; i++) {
+            selectOptions.add(new SelectOption(String.valueOf(i+1), input.get(i - 1)));
         }
         return selectOptions;
     }

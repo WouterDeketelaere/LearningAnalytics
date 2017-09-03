@@ -28,24 +28,21 @@
                                     <div id="roctab" class="tab-pane fade in active">
                                         <div class="row top-buffer">
                                             <div class="col-md-2">
-                                                <form id="roc_form_1" class="form-inline">
-                                                    <button id="avsbc" class="btn btn-default">A vs BC
-                                                    </button>
-                                                </form>
+                                                <button id="avsbc" class="btn btn-default">A vs BC
+                                                </button>
                                             </div>
                                             <div class="col-md-4">
-                                                <input id="roc1slider" data-provide="slider" data-slider-id='roc1slider'
+                                                <input id="fpr1_slider" data-provide="slider" data-slider-id='fpr1_slider'
                                                        type="text" data-slider-min="0" data-slider-max="1"
                                                        data-slider-step="0.05" data-slider-value="0.1"/>
                                             </div>
                                             <div class="col-md-2">
-                                                <form id="roc_form_2" class="form-inline">
-                                                    <button id="cvsab" class="btn btn-default">C vs AB
-                                                    </button>
-                                                </form>
+                                                <button id="cvsab" class="btn btn-default">C vs AB
+                                                </button>
+
                                             </div>
                                             <div class="col-md-4">
-                                                <input id="roc2slider" data-provide="slider" data-slider-id='roc2slider'
+                                                <input id="fpr2_slider" data-provide="slider" data-slider-id='fpr2_slider'
                                                        type="text" data-slider-min="0" data-slider-max="1"
                                                        data-slider-step="0.05" data-slider-value="0.1"/>
                                             </div>
@@ -175,18 +172,28 @@
                                     </div>
                                     <div id="clusterstab" class="tab-pane fade">
                                         <div class="row top-buffer">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label for="cluster_btn">Build clusters</label>
                                                 <div>
                                                     <button id="cluster_btn" class="btn btn-default">Create
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
+                                                <label for="input">Select dataset</label>
+                                                <select class="form-control chosen" required name="input"
+                                                        id="clusterinput">
+                                                    <option value="0">select dataset</option>
+                                                    <option th:each="dataset: ${clusterdatasets}"
+                                                            th:value="${dataset.id}"
+                                                            th:text="${dataset.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
                                                 <label for="instrument">Select cluster</label>
                                                 <div>
-                                                    <select class="form-control chosen" required name="cluster"
-                                                            id="cluster">
+                                                    <select class="form-control chosen" required name="cluster_select"
+                                                            id="cluster_select">
                                                         <option value="0">Select cluster</option>
                                                         <option value="1">Cluster 1</option>
                                                         <option value="2">Cluster 2</option>
@@ -202,8 +209,8 @@
                                                     <div id="radarchart1"></div>
                                                 </div>
                                             </div>
-                                        <!--</div>
-                                        <div class="row top-buffer">-->
+                                            <!--</div>
+                                            <div class="row top-buffer">-->
                                             <div class="col-md-6">
                                                 <div id="body2">
                                                     <div id="radarchart2"></div>

@@ -101,21 +101,12 @@ $(function () {
     $('.chosen').chosen();
     // connect to Web Socket for process progress updates
     connect();
+    // toggle default filter code buttons
     initbuttons();
+    // on load plot sankey plot of tracks
     plot_sankey("/dashboard/tracks?which=avsbc");
 
-    $("#roc_form_1").on('submit', function (e) {
-        e.preventDefault();
-    });
-
-    $("#roc_form_2").on('submit', function (e) {
-        e.preventDefault();
-    });
-
-    $("#predict_form").on('submit', function (e) {
-        //e.preventDefault();
-    });
-
+    // eventhandler for predict button
     $("#predict_btn").click(function () {
         var studentids = $('#predict_studentids').val();
         var params = {
@@ -138,11 +129,11 @@ $(function () {
         plot_roc_chart("/dashboard/roc?which=cvsab", "#roc2", "C vs AB")
     });
 
-    $("#roc1slider").on('slideStop', function (e) {
+    $("#fpr1_slider").on('slideStop', function (e) {
         plot_sankey("/dashboard/tracks?which=avsbc&threshold=" + e.value);
     });
 
-    $("#roc2slider").on('slideStop', function (e) {
+    $("#fpr2_slider").on('slideStop', function (e) {
         plot_sankey("/dashboard/tracks?which=cvsab&threshold=" + e.value);
     });
 
@@ -156,12 +147,19 @@ $(function () {
         var url = "/dashboard/weights?";
         plot_attribute_weights(url + $.param(params));
     });
+    // eventhandler for cluster create button.
+    // Clusters will be created and stored on backend after RM process has ran.
     $('#cluster_btn').on('click', function (e) {
+        var params = {
+            input: $('#clusterinput').val()
+        };
+
         $.ajax({
-            url: "/dashboard/createclusters"
+            url: "/dashboard/createclusters?" + $.param(params)
         });
     });
-    $('#cluster').on('change', function(e){
+    // eventhandler that select & displays a backend stored cluster
+    $('#cluster_select').on('change', function(e){
         var params1 = {
             type: 0
         };

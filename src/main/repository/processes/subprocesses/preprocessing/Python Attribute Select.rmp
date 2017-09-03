@@ -65,7 +65,7 @@
         <parameter key="datamanagement" value="double_array"/>
         <parameter key="data_management" value="auto"/>
       </operator>
-      <operator activated="true" class="python_scripting:execute_python" compatibility="7.4.000" expanded="true" height="103" name="Python Script" width="90" x="410" y="35">
+      <operator activated="true" class="python_scripting:execute_python" compatibility="7.4.000" expanded="true" height="103" name="Python Script" width="90" x="412" y="34">
         <parameter key="script" value="import pandas as pd&#10;&#10;# rm_main is a mandatory function, &#10;# the number of arguments has to be the number of input ports (can be none)&#10;def rm_main(data,meta_data):&#10;    # output can be found in Log View    &#10;    # meta_data = pd.read_excel(&quot;/home/wouter/Google Drive/Master AI/Thesis/Code/Repository/data/Data Analyse.xlsx&quot;,sheetname='RapidminerWeights')&#10;    # filtercode = '11'&#10;    # targets = 'Doorloop: Studieduur'&#10;    # your code goes here&#10;    # transform input into lists&#10;    targets = '%{targets}'&#10;    targets = targets.split(&quot;,&quot;)&#10;    filtercode = '%{filtercode}'&#10;    filtercode = filtercode.split(&quot;,&quot;)&#10;   &#10;    selected_attributes = meta_data.loc[(meta_data['Attribute'].isin(targets)) | (meta_data['Filter Code'].isin(filtercode))]['Attribute']&#10;&#10;    #for example:&#10;    filter = list(set(data.columns.values).intersection(selected_attributes))&#10;    data2 = data[filter]&#10;&#10;    # connect 2 output ports to see the results&#10;    return data2, data"/>
       </operator>
       <connect from_port="input 1" to_op="Python Script" to_port="input 1"/>

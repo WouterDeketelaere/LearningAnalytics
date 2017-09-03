@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by wouter on 21.12.16.
+ * Service Bean that is used to manage users of the website.
  */
 @Service
 public class UserServiceImpl implements UserService {

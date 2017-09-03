@@ -96,8 +96,8 @@ function formatprediction(jsonData) {
         values.pop();
         for (var j = 0; j < keys.length; j++) {
             var confidence = keys[j];
-            var parts = confidence.match(re)
-            var type = parts[1]
+            var parts = confidence.match(re);
+            var type = parts[1];
             var outcome = parts[3];
             var obj = {};
             obj['Outcome'] = outcome;

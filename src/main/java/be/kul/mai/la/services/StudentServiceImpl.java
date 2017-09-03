@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by wouter on 31.12.16.
+ * Service Bean that can be used to extract student information from the database.
  */
 @Service
 public class StudentServiceImpl implements StudentService {

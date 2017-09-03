@@ -2,12 +2,12 @@ function plot_sankey(url) {
     var units = "Students";
 
     // set the dimensions and margins of the graph
-    var $container = $('#sankeychart'), width = $container.width();
+    var $container = $('#sankeychart'), width = $container.parent().width();
 
     // set the dimensions and margins of the graph
     var margin = {top: 30, right: 30, bottom: 0, left: 0},
-        width = 890 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
+        width = width - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
     // format variables
     var formatNumber = d3.format(",.0f"),    // zero decimal places

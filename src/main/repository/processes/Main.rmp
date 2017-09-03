@@ -13,7 +13,7 @@
       </macro>
       <macro>
         <key>filtercode</key>
-        <value>11,12,13,21,22,23,31,32,33</value>
+        <value>11</value>
       </macro>
       <macro>
         <key>mapper</key>
@@ -21,7 +21,7 @@
       </macro>
       <macro>
         <key>instrument</key>
-        <value>1</value>
+        <value>4</value>
       </macro>
       <macro>
         <key>nom_num</key>
@@ -49,7 +49,7 @@
       </macro>
       <macro>
         <key>input</key>
-        <value>1</value>
+        <value>2</value>
       </macro>
       <macro>
         <key>comprehensive</key>
@@ -159,7 +159,7 @@
         </list>
         <parameter key="fail_for_unknown_macros" value="true"/>
       </operator>
-      <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="229" name="Run Type" width="90" x="624" y="34">
+      <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="250" name="Run Type" width="90" x="624" y="34">
         <parameter key="select_which" value="%{run_type}"/>
         <process expanded="true">
           <operator activated="true" class="productivity:execute_process" compatibility="7.6.001" expanded="true" height="82" name="Attribute Selection" width="90" x="118" y="34">
@@ -188,6 +188,7 @@
           <portSpacing port="sink_output 7" spacing="0"/>
           <portSpacing port="sink_output 8" spacing="0"/>
           <portSpacing port="sink_output 9" spacing="0"/>
+          <portSpacing port="sink_output 10" spacing="0"/>
         </process>
         <process expanded="true">
           <operator activated="true" class="generate_macro" compatibility="7.6.001" expanded="true" height="103" name="Set Predict Type" width="90" x="55" y="34">
@@ -252,7 +253,6 @@
               <connect from_op="ROC Prediction" from_port="result 2" to_port="output 2"/>
               <connect from_op="ROC Prediction" from_port="result 3" to_port="output 3"/>
               <connect from_op="ROC Prediction" from_port="result 4" to_port="output 4"/>
-              <connect from_op="ROC Prediction" from_port="result 5" to_port="output 5"/>
               <portSpacing port="source_input 1" spacing="0"/>
               <portSpacing port="source_input 2" spacing="0"/>
               <portSpacing port="source_input 3" spacing="0"/>
@@ -337,6 +337,7 @@
           <portSpacing port="sink_output 7" spacing="0"/>
           <portSpacing port="sink_output 8" spacing="0"/>
           <portSpacing port="sink_output 9" spacing="0"/>
+          <portSpacing port="sink_output 10" spacing="0"/>
         </process>
         <process expanded="true">
           <operator activated="true" class="generate_macro" compatibility="7.6.001" expanded="true" height="103" name="Set Train Type" width="90" x="71" y="34">
@@ -344,7 +345,7 @@
               <parameter key="instrument_type" value="if(equals(%{type},&quot;regular&quot;), 1,if(equals(%{type}, &quot;roc&quot;), 2, 3))"/>
             </list>
           </operator>
-          <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="166" name="Train Type" width="90" x="223" y="34">
+          <operator activated="true" class="select_subprocess" compatibility="7.6.001" expanded="true" height="187" name="Train Type" width="90" x="223" y="34">
             <parameter key="select_which" value="%{instrument_type}"/>
             <process expanded="true">
               <operator activated="true" class="productivity:execute_process" compatibility="7.6.001" expanded="true" height="103" name="Train Ensemble Instrument" width="90" x="45" y="34">
@@ -381,22 +382,27 @@
               <portSpacing port="sink_output 4" spacing="0"/>
               <portSpacing port="sink_output 5" spacing="0"/>
               <portSpacing port="sink_output 6" spacing="0"/>
+              <portSpacing port="sink_output 7" spacing="0"/>
             </process>
             <process expanded="true">
-              <operator activated="true" class="productivity:execute_process" compatibility="7.6.001" expanded="true" height="103" name="Train ROC" width="90" x="45" y="34">
+              <operator activated="true" class="productivity:execute_process" compatibility="7.6.001" expanded="true" height="145" name="Train ROC" width="90" x="45" y="34">
                 <parameter key="process_location" value="subprocesses/instruments/train/ROC"/>
                 <parameter key="use_input" value="true"/>
                 <parameter key="store_output" value="false"/>
                 <parameter key="propagate_metadata_recursively" value="true"/>
                 <parameter key="cache_process" value="true"/>
-                <list key="macros"/>
+                <list key="macros">
+                  <parameter key="instrument" value="%{instrument}"/>
+                </list>
                 <parameter key="fail_for_unknown_macros" value="false"/>
               </operator>
               <operator activated="true" class="performance_to_data" compatibility="7.6.001" expanded="true" height="82" name="Performance to Data" width="90" x="175" y="34"/>
-              <operator activated="true" class="performance_to_data" compatibility="7.6.001" expanded="true" height="82" name="Performance to Data (3)" width="90" x="176" y="133"/>
+              <operator activated="true" class="performance_to_data" compatibility="7.6.001" expanded="true" height="82" name="Performance to Data (3)" width="90" x="180" y="115"/>
               <connect from_port="input 1" to_op="Train ROC" to_port="input 1"/>
               <connect from_op="Train ROC" from_port="result 1" to_op="Performance to Data" to_port="performance vector"/>
               <connect from_op="Train ROC" from_port="result 2" to_op="Performance to Data (3)" to_port="performance vector"/>
+              <connect from_op="Train ROC" from_port="result 3" to_port="output 5"/>
+              <connect from_op="Train ROC" from_port="result 4" to_port="output 6"/>
               <connect from_op="Performance to Data" from_port="example set" to_port="output 1"/>
               <connect from_op="Performance to Data" from_port="performance vector" to_port="output 3"/>
               <connect from_op="Performance to Data (3)" from_port="example set" to_port="output 2"/>
@@ -410,6 +416,7 @@
               <portSpacing port="sink_output 4" spacing="0"/>
               <portSpacing port="sink_output 5" spacing="0"/>
               <portSpacing port="sink_output 6" spacing="0"/>
+              <portSpacing port="sink_output 7" spacing="0"/>
             </process>
             <process expanded="true">
               <operator activated="true" class="multiply" compatibility="7.6.001" expanded="true" height="103" name="Multiply" width="90" x="45" y="34"/>
@@ -428,6 +435,7 @@
                   <parameter key="targets" value="%{targets}"/>
                   <parameter key="filtercode" value="%{filtercode}"/>
                   <parameter key="comprehensive" value="%{comprehensive}"/>
+                  <parameter key="type" value="%{type}"/>
                 </list>
                 <parameter key="fail_for_unknown_macros" value="false"/>
               </operator>
@@ -466,6 +474,7 @@
               <portSpacing port="sink_output 4" spacing="0"/>
               <portSpacing port="sink_output 5" spacing="0"/>
               <portSpacing port="sink_output 6" spacing="0"/>
+              <portSpacing port="sink_output 7" spacing="0"/>
             </process>
           </operator>
           <connect from_port="input 1" to_op="Set Train Type" to_port="through 1"/>
@@ -477,6 +486,7 @@
           <connect from_op="Train Type" from_port="output 3" to_port="output 6"/>
           <connect from_op="Train Type" from_port="output 4" to_port="output 7"/>
           <connect from_op="Train Type" from_port="output 5" to_port="output 8"/>
+          <connect from_op="Train Type" from_port="output 6" to_port="output 9"/>
           <portSpacing port="source_input 1" spacing="0"/>
           <portSpacing port="source_input 2" spacing="0"/>
           <portSpacing port="source_input 3" spacing="0"/>
@@ -489,6 +499,7 @@
           <portSpacing port="sink_output 7" spacing="0"/>
           <portSpacing port="sink_output 8" spacing="0"/>
           <portSpacing port="sink_output 9" spacing="0"/>
+          <portSpacing port="sink_output 10" spacing="0"/>
         </process>
       </operator>
       <operator activated="true" class="text:data_to_json" compatibility="7.5.000" expanded="true" height="82" name="ROC C vs AB" width="90" x="857" y="391">
@@ -531,6 +542,7 @@
       <connect from_op="Run Type" from_port="output 6" to_port="result 5"/>
       <connect from_op="Run Type" from_port="output 7" to_port="result 6"/>
       <connect from_op="Run Type" from_port="output 8" to_port="result 7"/>
+      <connect from_op="Run Type" from_port="output 9" to_port="result 8"/>
       <connect from_op="ROC C vs AB" from_port="documents" to_port="result 4"/>
       <connect from_op="ROC A vs BC" from_port="documents" to_port="result 3"/>
       <connect from_op="Output 2 / Predict Track" from_port="documents" to_port="result 2"/>
@@ -544,6 +556,7 @@
       <portSpacing port="sink_result 6" spacing="0"/>
       <portSpacing port="sink_result 7" spacing="0"/>
       <portSpacing port="sink_result 8" spacing="0"/>
+      <portSpacing port="sink_result 9" spacing="0"/>
     </process>
   </operator>
 </process>
