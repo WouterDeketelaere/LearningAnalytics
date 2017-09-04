@@ -26,7 +26,11 @@ var RadarChart = {
                 }
             }
         }
-        cfg.maxValue = Math.max(cfg.maxValue, d3.max(d, function(i){return d3.max(i.map(function(o){return o.value;}))}));
+        cfg.maxValue = Math.max(cfg.maxValue, d3.max(d, function (i) {
+            return d3.max(i.map(function (o) {
+                return o.value;
+            }))
+        }));
         //cfg.maxValue = 1;
         var allAxis = (d[0].map(function (i, j) {
             return i.axis
@@ -201,7 +205,16 @@ var RadarChart = {
                 .attr("data-id", function (j) {
                     return j.axis
                 })
-                .style("fill", cfg.color(series)).style("fill-opacity", .9)
+                //.style("fill", cfg.color(series)).style("fill-opacity", .9)
+                .style("fill", function (d) {
+                    if (d.value >= 0.5) {
+                        return cfg.color(series)
+                    } else {
+                        return 'fff'
+                    }
+                })
+                .style("stroke-width", "2px")
+                .style("stroke", cfg.color(series)).style("fill-opacity", .9)
                 .on('mouseover', function (d) {
                     newX = parseFloat(d3.select(this).attr('cx')) - 10;
                     newY = parseFloat(d3.select(this).attr('cy')) - 5;

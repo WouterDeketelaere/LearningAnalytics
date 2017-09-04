@@ -156,7 +156,7 @@ function sankeyformat(data) {
                 "name": "Orange"
             }],
         "links": []
-    }
+    };
 
     for (var key in Object.keys(data)) {
         switch (data[key].Track) {
@@ -176,7 +176,7 @@ function sankeyformat(data) {
             "source": 0,
             "target": 0,
             "value": 0
-        }
+        };
         switch (track) {
             case 'Red':
                 link.source = 0;
