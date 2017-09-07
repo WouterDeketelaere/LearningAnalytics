@@ -62,6 +62,9 @@ function initbuttons() {
     $($('.fc_attr')[0]).bootstrapToggle('on');
 
     $($('.mapper')[0]).bootstrapToggle('on');
+
+    $('#fpr1_slider').slider('setValue',0.16);
+    $('#fpr2_slider').slider('setValue',0.13);
 }
 
 function extractFiltercodes(clazz) {

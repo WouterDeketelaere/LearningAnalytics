@@ -178,12 +178,12 @@ function sankeyformat(data) {
             "value": 0
         };
         switch (track) {
-            case 'Red':
+            case 'Green':
                 link.source = 0;
                 link.target = 1;
                 link.value = stats[track];
                 break;
-            case 'Green':
+            case 'Red':
                 link.source = 0;
                 link.target = 2;
                 link.value = stats[track];

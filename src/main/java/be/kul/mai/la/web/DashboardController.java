@@ -206,6 +206,7 @@ public class DashboardController {
         switch (which) {
             case "avsbc":
                 thresholds.put("AvsBC", threshold);
+                break;
             default:
                 thresholds.put("CvsAB", threshold);
         }
